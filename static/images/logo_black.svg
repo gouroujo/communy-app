@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	width="50px" height="15px" viewBox="0 0  100 20" enable-background="new 0 0 140 32" xml:space="preserve">
+	<g>
+		<!-- <text fill="#000000" x="0" y="20" id="o_texte" style="font-family: Arial; font-size: 20px;">C</text> -->
+		<text fill="#000000" x="0" y="20" id="o_texte" style="font-family: Arial; font-size: 20px;">Co</text>
+		<text fill="#000000" x="26" y="17" id="e285_texte" style="font-family: Arial; font-size: 20px;">m</text>
+		<text fill="#000000" x="39" y="17" id="e285_texte" style="font-family: Arial; font-size: 20px;">m</text>
+		<text fill="#000000" x="48.2" y="20" id="e300_texte" style="font-family: Arial; font-size: 20px;">uny</text>
+		<text fill="#000000" x="80" y="20" id="e300_texte" style="font-family: Arial; font-size: 10px;">.org</text>
+		<line stroke="#000000" id="e505_line" x1="22" y1="19" x2="50" y2="19" stroke-width="1.5" stroke-miterlimit="10"/>
+		<circle stroke="#000000" id="e505_line" cx="32" cy="5" r="1" stroke-width="1.5" stroke-miterlimit="10"/>
+		<circle stroke="#000000" id="e505_line" cx="38" cy="5" r="1" stroke-width="1.5" stroke-miterlimit="10"/>
+		<circle stroke="#000000" id="e505_line" cx="45" cy="5" r="1" stroke-width="1.5" stroke-miterlimit="10"/>
+		<circle stroke="#000000" id="e505_line" cx="51" cy="5" r="1" stroke-width="1.5" stroke-miterlimit="10"/>
+
+	</g>
+</svg>

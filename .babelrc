@@ -1,0 +1,39 @@
+{
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "modules": "commonjs"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "babel-plugin-inline-import-graphql-ast",
+    ["module-resolver", {
+      "alias": {
+        "hocs": "./hocs",
+        "lib": "./lib",
+        "containers": "./containers",
+        "components": "./components",
+        "fragments": "./fragments"
+      }
+    }],
+    [
+      "transform-assets-import-to-string",
+      {
+        "baseDir": "static",
+        "baseUri": "/"
+      }
+    ]
+  ],
+  "env": {
+    "development": {
+      "plugins": ["inline-dotenv"]
+    },
+    "production": {
+      "plugins": ["transform-inline-environment-variables"]
+    }
+  }
+}
