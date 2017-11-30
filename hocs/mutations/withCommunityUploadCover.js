@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 export const mutation = gql`
   mutation uploadCommunityCover(
     $communityId: ID!
-    $input: CommunityInput!
+    $input: OrganisationInput!
   ) {
     community: editOrganisation(id: $communityId, input: $input) {
       id
@@ -39,7 +39,7 @@ const withCommunityUploadCover = (WrappedComponent) => {
         const formdata = new window.FormData();
         Object.keys(options).forEach(key => formdata.append(key, options[key]));
         formdata.append('file', file);
-        return window.fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY}/image/upload`, {
+        return window.fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`, {
           method: 'POST',
           body: formdata,
         })
@@ -53,7 +53,7 @@ const withCommunityUploadCover = (WrappedComponent) => {
             variables: {
               communityId: this.props.communityId,
               input: {
-                logo: json.version
+                cover: json.version
               }
             },
             optimisticResponse: {
@@ -61,7 +61,7 @@ const withCommunityUploadCover = (WrappedComponent) => {
               community: {
                 __typename: 'Organisation',
                 id: this.props.communityId,
-                logo: json.secure_url,
+                cover: json.secure_url,
               }
             },
           })

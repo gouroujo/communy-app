@@ -20,7 +20,7 @@ export default ({ day, date, events = []}) => {
             >
               <a className="title">{event.title}</a>
             </Link>
-            <div className="time">{moment(event.start).format('hh:mm')}</div>
+            <div className="time">{moment(event.startTime).format('hh:mm')}</div>
           </div>
         ))}
       </div>

@@ -9,9 +9,9 @@ class CommunityLogo extends React.PureComponent {
     loading: false
   }
 
-  uploadCover = (file) => {
+  uploadLogo = (file) => {
     this.setState({ loading: true }, () => {
-      this.props.uploadCover(file)
+      this.props.uploadLogo(file)
       .then(() => this.setState({ loading: false }))
       .catch(() => this.setState({ loading: false }))
     })

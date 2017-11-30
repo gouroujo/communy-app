@@ -33,7 +33,7 @@
       "plugins": ["inline-dotenv"]
     },
     "production": {
-      "plugins": ["transform-inline-environment-variables"]
+      "plugins": [["inline-dotenv", {"path": ".env.production"}], "transform-inline-environment-variables"]
     }
   }
 }
