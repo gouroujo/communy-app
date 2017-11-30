@@ -1,7 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
+import moment from 'moment'
 
-import ParticipationList from 'components/web/Event/List'
+import EventFilter from 'components/web/Event/Filter'
+import EventList from 'components/web/Event/List'
 
 import withCommunity from 'hocs/queries/withCommunity'
 
@@ -28,10 +30,8 @@ export const fragment = gql`
         event {
           id
           title
-          parts {
-            startTime
-            endTime
-          }
+          startTime
+          endTime
         }
       }
     }
@@ -57,30 +57,42 @@ export const query = gql`
 `
 
 class RegistrationCommunityParticipationList extends React.PureComponent {
-  render() {
-    const { community } = this.props
+  constructor(props){
+    super(props)
+    this.state = {
+      participationFilter: {
+        offset: 0,
+        limit: 10,
+        after: moment(),
+        before: null,
+      }
+    }
+  }
 
-    const registration = community && community.registration
-    if (!registration || !registration.participations) return null
+  filterChange = (filter) => this.setState({ participationFilter: filter })
+
+  render() {
+    const { communityId, userId } = this.props
+
+    const EventListWithParticipation = withCommunity(query)(EventList)
 
     return (
-      <ParticipationList events={registration.participations.map(participation => ({
-        ...participation.event,
-        organisation: {
-          title: community.title,
-          id: community.id,
-        },
-        participation: {
-          id: participation.id,
-          answer: participation.answer
-        }
-      }))}
-      compact
-      emptyMsg="Aucune participation"
-      displayOrg={false}
-    />
+      <div style={{ textAlign: 'center'}}>
+        <EventFilter
+          filter={this.state.participationFilter}
+          onChange={this.filterChange}
+        />
+        <EventListWithParticipation
+          offset={this.state.offset}
+          communityId={communityId}
+          userId={userId}
+          answer="YES"
+          {...this.state.participationFilter}
+        />
+      </div>
+
     )
   }
 }
 
-export default withCommunity(query)(RegistrationCommunityParticipationList)
+export default RegistrationCommunityParticipationList

@@ -4,19 +4,14 @@ COPY ./qemu-aarch64-static /usr/bin/qemu-aarch64-static
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 
-COPY package.json /usr/src/
-COPY yarn.lock /usr/src/
-RUN yarn
+ENV PORT 3000
+ENV NODE_ENV production
+
 
 # Bundle app source
-COPY ./static /usr/src/static
-COPY ./pages /usr/src/pages
-COPY ./lib /usr/src/lib
-COPY ./components /usr/src/components
-COPY ./containers /usr/src/containers
-COPY ./hocs /usr/src/hocs
+COPY ./.next /usr/src/.next
+COPY ./server.js /usr/src/server.js
 
-RUN yarn build
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]

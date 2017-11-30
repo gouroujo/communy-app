@@ -34,6 +34,7 @@ class CommunityCover extends React.PureComponent {
 
         <div className="upload">
           <ButtonUpload
+            style={{ padding: 5 }}
             icon="camera"
             disabled={this.state && this.state.loading}
             onChange={this.uploadCover}
@@ -68,7 +69,6 @@ class CommunityCover extends React.PureComponent {
             position: absolute;
             top: 10px;
             right: 10px;
-            padding: 5px !important;
           }
 
           .ui.cover > .children {

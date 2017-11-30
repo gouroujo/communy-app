@@ -1,40 +1,25 @@
 import React from 'react';
 
-import { Form, Message, Button, Icon } from 'semantic-ui-react'
-import SelectType from 'components/web/Community/SelectType';
-// import ButtonUploadImage from 'components/ButtonUploadImage';
+import { Form, Message } from 'semantic-ui-react'
+import SelectType from 'components/web/Community/SelectType'
+import SelectTag from 'components/web/Community/SelectTag'
 
-const ORG_CATEGORIES = [
-  { id: 'ngo', icon: 'heart', label: 'Caritatif' },
-  { id: 'art', icon: 'paint brush', label: 'Art' },
-  { id: 'music', icon: 'music', label: 'Musique' },
-  { id: 'science', icon: 'lab', label: 'Science' },
-  { id: 'it', icon: 'at', label: 'Informatique' },
-  { id: 'politic', icon: 'university', label: 'Politique' },
-  { id: 'consumer', icon: 'shopping basket', label: 'Consommation' },
-  { id: 'ecology', icon: 'leaf', label: 'Écologie' },
-  { id: 'sport', icon: 'soccer', label: 'Sport' },
-  { id: 'handi', icon: 'wheelchair', label: 'Handicap' },
-  { id: 'student', icon: 'student', label: 'Éducation' },
-  { id: 'party', icon: 'birthday', label: 'Fête' },
-  { id: 'migration', icon: 'exchange', label: 'Migrations' },
-]
 class OrganisationForm extends React.PureComponent {
   state = {
     loading: this.props.loading || false,
-    organisation: this.props.organisation ||{},
+    organisation: this.props.community ||{},
     error: null,
     success: false
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.organisation) {
+    if (nextProps.community) {
       this.setState(prevState => ({
         ...prevState,
         loading: nextProps.loading,
         organisation: {
-          ...nextProps.organisation,
-          ...prevState.organisation
+          ...nextProps.community,
+          ...prevState.community
         },
       }))
     }
@@ -67,24 +52,13 @@ class OrganisationForm extends React.PureComponent {
       }
     }))
   }
-  handleSelectTag = (ev, { name }) => {
-    ev.preventDefault();
-    this.setState(prevState => {
-      if (!prevState.organisation) return;
-      const categories = prevState.organisation.categories ? [...prevState.organisation.categories] : []
-      if (categories.includes(name)) {
-        categories.splice(categories.findIndex(e => e === name), 1);
-      } else {
-        categories.push(name)
+  handleChangeTag = (tags) => {
+    this.setState(prevState => ({
+      organisation: {
+        ...prevState.organisation,
+        categories: tags
       }
-      return {
-        ...prevState,
-        organisation: {
-          ...prevState.organisation,
-          categories
-        }
-      }
-    })
+    }))
   }
 
   render() {
@@ -123,24 +97,9 @@ class OrganisationForm extends React.PureComponent {
         <Form.Field>
           <label>Domaines d'activité</label>
           <div style={{ textAlign: 'center'}}>
-            {ORG_CATEGORIES.map(({id, icon, label}) => (
-              <Button
-                type="button"
-                key={id}
-                name={id}
-                onClick={this.handleSelectTag}
-                style={{ margin: 5 }}
-                animated='fade'
-                primary={organisation.categories && organisation.categories.includes(id)}
-                size='massive'>
-                <Button.Content hidden>
-                  <span style={{ fontSize: '1rem'}}>{label}</span>
-                </Button.Content>
-                <Button.Content visible>
-                  <Icon name={icon} />
-                </Button.Content>
-              </Button>
-            ))}
+            <SelectTag
+              tags={organisation.categories || []}
+              onChange={this.handleChangeTag} />
           </div>
 
         </Form.Field>

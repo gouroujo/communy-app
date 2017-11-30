@@ -18,11 +18,9 @@ export const fragment = gql`
       id
       answer
     }
-    parts {
-      startTime
-      endTime
-      duration
-    }
+    startTime
+    endTime
+    duration
   }
 `
 

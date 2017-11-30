@@ -6,6 +6,9 @@ export default (query) => {
     options: (ownProps) => ({
       variables: {
         limit: ownProps.limit,
+        offset: ownProps.offset,
+        categories: ownProps.categories,
+        search: ownProps.categories
       },
     }),
     props: ({ data: { loading, communities } }) => ({

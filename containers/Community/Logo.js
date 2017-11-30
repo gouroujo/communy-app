@@ -35,6 +35,7 @@ class CommunityLogo extends React.PureComponent {
 
         <div className="upload">
           <ButtonUpload
+            style={{ padding: 5 }}
             icon="camera"
             disabled={this.state && this.state.loading}
             onChange={this.uploadLogo}

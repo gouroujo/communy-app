@@ -1,11 +1,9 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import moment from 'moment'
 
 import RegistrationLayout from 'components/web/Registration/Layout'
 import RegistrationUser from 'components/web/Registration/User'
 
-import ParticipationFilter from 'components/web/Event/Filter'
 import ParticipationList from 'containers/Registration/CommunityParticipationList'
 
 import RegistrationCommunityButtons from 'containers/Registration/CommunityButtons'
@@ -46,18 +44,6 @@ export const query = gql`
 `
 
 class RegistrationCommunity extends React.PureComponent {
-  constructor(props){
-    super(props)
-    this.state = {
-      participationFilter: {
-        after: moment(),
-        before: null,
-        answers: ['YES']
-      }
-    }
-  }
-
-  filterChange = (filter) => this.setState({ participationFilter: filter })
 
   render() {
     const { community, communityId, userId } = this.props
@@ -66,7 +52,7 @@ class RegistrationCommunity extends React.PureComponent {
 
     return (
       <RegistrationLayout aside={
-        <div>
+        <div style={{ textAlign: 'center' }}>
           <RegistrationUser user={registration && registration.user} />
           <RegistrationCommunityButtons
             registration={registration}
@@ -75,14 +61,9 @@ class RegistrationCommunity extends React.PureComponent {
           />
         </div>
       }>
-        <ParticipationFilter
-          filter={this.state.participationFilter}
-          onChange={this.filterChange}
-        />
         <ParticipationList
           communityId={communityId}
           userId={userId}
-          {...this.state.participationFilter}
         />
       </RegistrationLayout>
     )

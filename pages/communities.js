@@ -9,6 +9,8 @@ export default withData(() => (
     <AppTitle header="Trouvez un engagement qui vous ressemble">
       Choisissez votre cause, gérez votre engagement au quotidien en fonction de vos disponibilités
     </AppTitle>
-    <CommunityList />
+    <div style={{ margin: '10px auto', maxWidth: 1000 }}>
+      <CommunityList />
+    </div>
   </Layout>
 ))

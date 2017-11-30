@@ -2,7 +2,7 @@ import React from 'react'
 import { withApollo, compose } from 'react-apollo'
 import Link from 'next/link'
 
-import { Button } from 'semantic-ui-react'
+import { Button, Segment } from 'semantic-ui-react'
 
 import withData from 'lib/withData'
 import getUser from 'lib/getUser'
@@ -50,7 +50,9 @@ class Login extends React.Component {
           </Link>
 
         </AppTitle>
-        <SigninForm />
+        <Segment style={{ maxWidth: 500, textAlign: 'center', margin: '0 auto' }}>
+          <SigninForm />
+        </Segment>
       </Layout>
     )
   }

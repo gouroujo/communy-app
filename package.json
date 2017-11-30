@@ -2,7 +2,7 @@
   "name": "next-app",
   "scripts": {
     "dev": "node server.js",
-    "build": "next build",
+    "build": "NODE_ENV=production next build",
     "start": "NODE_ENV=production node server.js",
     "clean": "rimraf ./node_modules/.cache",
     "docker:login": "docker login",
@@ -24,6 +24,8 @@
     "graphql-tag": "^2.5.0",
     "isomorphic-unfetch": "^2.0.0",
     "lodash": "^4.17.4",
+    "lodash.debounce": "^4.0.8",
+    "lodash.pick": "^4.4.0",
     "moment": "^2.19.2",
     "next": "^4.1.4",
     "prop-types": "^15.6.0",

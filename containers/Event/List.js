@@ -11,10 +11,8 @@ export const fragment = gql`
     title
     description
     duration
-    parts {
-      startTime
-      endTime
-    }
+    startTime
+    endTime
     nanswer
     nyes
     nno

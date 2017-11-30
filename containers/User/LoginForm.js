@@ -3,8 +3,6 @@ import { compose } from 'react-apollo';
 
 import { Form, Divider, Button, Icon } from 'semantic-ui-react'
 
-// import Message from 'semantic-ui-react/dist/es/collections/Message';
-
 import withFacebookConnect from 'hocs/withFacebookConnect';
 import withUserSignWithFacebook from 'hocs/mutations/withUserSignWithFacebook';
 import withUserLogin from 'hocs/mutations/withUserLogin';

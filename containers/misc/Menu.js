@@ -11,8 +11,9 @@ import withUser from 'hocs/queries/withUser';
 
 
 class AppMenu extends React.PureComponent {
-  static getInitialState() {
-    return {
+  constructor(props) {
+    super(props)
+    this.state = {
       value: 0,
       isMobile: process.browser ? (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) < 480 : false
     }
@@ -44,7 +45,6 @@ class AppMenu extends React.PureComponent {
 
   render() {
     const { user } = this.props;
-
     if (user) {
       return (
         <Menu value={this.state ? this.state.value : 0} mobile={false}>
@@ -71,9 +71,9 @@ class AppMenu extends React.PureComponent {
     }
 
     return (
-      <Menu value={0} mobile={false}>
+      <Menu value={this.state ? this.state.value : 0} mobile={false}>
         <Link href="/">
-          <img src="/static/images/logo.svg" alt="Communy" />
+          <img src="/static/images/logo_white.png" alt="Communy" />
         </Link>
         <div className="menu-item">
           <Link href="/login">

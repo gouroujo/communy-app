@@ -16,6 +16,12 @@ export default (query) => {
     props: ({ data: { loading, community } }) => ({
       loading,
       community,
+      events: community && (community.events || (community.registration && community.registration.participations && community.registration.participations.map(participation => ({
+        ...participation.event,
+        participation
+      })))),
+      nevents: community && (community.nevents || (community.registration && community.registration.nparticipations)),
+      registrations: community && community.registrations,
     }),
   })
 }

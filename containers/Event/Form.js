@@ -80,46 +80,15 @@ export default class EventForm extends React.Component {
     return this.setState({ networkIds }, cb)
   }
 
-  handleChangeStartDate = (moment) => {
+  handleChangeDate = ({ startTime, endTime }) => {
     return this.setState(prevState => ({
       ...prevState,
       event: {
         ...prevState.event,
-        startTime: moment,
-        endTime: prevState.event.endTime || Moment(moment).add(4, 'hours')
-      }
-    }))
-  }
-
-  handleChangeStartTime = (ev, { value }) => {
-    const [ hour = 0, minute = 0 ] = value.split(":");
-    return this.setState(prevState => ({
-      ...prevState,
-      startTime: `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}`,
-      event: {
-        ...prevState.event,
-        startTime: (prevState.event.startTime || new Moment()).set({ hour, minute }),
-      }
-    }))
-  }
-
-  handleChangeEndDate = (moment) => {
-    return this.setState(prevState => ({
-      ...prevState,
-      event: {
-        ...prevState.event,
-        endTime: moment,
-      }
-    }))
-  }
-
-  handleChangeEndTime = (ev, { value }) => {
-    const [ hour, minute ] = value.split(":");
-    return this.setState(prevState => ({
-      ...prevState,
-      event: {
-        ...prevState.event,
-        endTime: prevState.event.endTime.set({ hour, minute }),
+        parts: [{
+          startTime,
+          endTime,
+        }]
       }
     }))
   }
@@ -149,7 +118,10 @@ export default class EventForm extends React.Component {
           focus
         />
         <Form.Field required>
-          <DatesInput name="parts" value={event.parts} onChange={this.handleChange}/>
+          <DatesInput name="parts" value={{
+            startTime: event.startTime,
+            endTime: event.endTime
+          }} onChange={this.handleChangeDate}/>
         </Form.Field>
         <AddressInput name='address' value={event.address || {}} onChange={this.handleChange}/>
         <Form.TextArea

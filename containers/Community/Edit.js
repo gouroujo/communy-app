@@ -1,29 +1,46 @@
-import React from 'react';
-import { compose } from 'react-apollo';
-import { withRouter } from 'react-router';
+import React from 'react'
+import gql from 'graphql-tag'
 
-import withOrganisationEdit from 'hocs/mutations/withOrganisationEdit';
-import withOrganisation from 'hocs/queries/withOrganisation';
+import withCommunityEdit from 'hocs/mutations/withCommunityEdit'
+import withCommunity from 'hocs/queries/withCommunity'
+import CommunityForm from 'containers/Community/Form'
 
-import OrganisationForm from 'containers/Organisation/Form';
+export const fragment = gql`
+  fragment CommunityEditFragment on Organisation {
+    id
+    title
+    description
+    type
+    categories
+  }
+`
 
-class OrganisationCreateForm extends React.Component {
+export const query = gql`
+  query CommunityView(
+    $communityId: ID!
+  ) {
+    community: organisation (id: $communityId ) {
+      ...CommunityEditFragment
+    }
+  }
+  ${fragment}
+`
+
+class OrganisationCreateForm extends React.PureComponent {
+
   render() {
-    const {
-      editOrganisation,
-      history,
-      ...props
-    } = this.props;
-    return <OrganisationForm
-      submit={editOrganisation}
-      submitText="Sauvegarder"
-      {...props}
-     />
+    const { editCommunity, communityId, ...props } = this.props
+
+    const CommunityFormWithData = withCommunity(query)(CommunityForm)
+    return (
+      <CommunityFormWithData
+        communityId={communityId}
+        submit={editCommunity}
+        submitText="Sauvegarder"
+        {...props}
+       />
+    )
   }
 }
 
-export default compose(
-  withOrganisation,
-  withOrganisationEdit,
-  withRouter,
-)(OrganisationCreateForm);
+export default withCommunityEdit(OrganisationCreateForm)

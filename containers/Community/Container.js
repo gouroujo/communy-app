@@ -13,7 +13,7 @@ import CommunityMenu from 'components/web/Community/Menu'
 import AppTitle from 'containers/misc/AppTitle'
 
 export const fragment = gql`
-  fragment CommunityViewFragment on Organisation {
+  fragment CommunityContainerFragment on Organisation {
     id
     title
     logo
@@ -35,7 +35,7 @@ export const query = gql`
     $communityId: ID!
   ) {
     community: organisation (id: $communityId ) {
-      ...CommunityViewFragment
+      ...CommunityContainerFragment
     }
   }
   ${fragment}
@@ -94,7 +94,9 @@ class CommunityContainer extends React.PureComponent {
 
     return (
       <div>
-        <AppTitle header="Communauté" />
+        <AppTitle header="Bienvenue sur votre future communauté">
+          Inscrivez-vous pour rejoindre {community && community.title}
+        </AppTitle>
         <Container>
           <Dimmer.Dimmable as={Card} dimmed={loading} fluid className="community">
 
@@ -120,7 +122,7 @@ class CommunityContainer extends React.PureComponent {
               <title>Communy - {community ? community.title : 'Chargement...'}</title>
             </Head>
             <CommunityHeader communityId={communityId} />
-            <div className="content padded" ref={this.handleContextRef}>
+            <div className="content" ref={this.handleContextRef}>
               <Sticky context={this.state.contextRef} offset={60} className="sticky" onStick={this.onStick} onUnstick={this.onUnstick}>
                 <CommunityMenu communityId={communityId} />
               </Sticky>
@@ -140,12 +142,15 @@ class CommunityContainer extends React.PureComponent {
             flex-direction: column;
           }
           .children {
-            padding-top: ${this.state.stick ? 54 : 0};
+            margin-top: ${this.state.stick ? '52px' : '10px'};
             padding-bottom: 2em;
             flex: 1;
           }
         `}</style>
         <style jsx global>{`
+          .sticky {
+            z-index: 5;
+          }
           .ui.card.community {
             min-height: calc(100vh - 67px);
             display: flex;

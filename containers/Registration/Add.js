@@ -20,10 +20,16 @@ class OrganisationAddUser extends React.Component {
     ev.preventDefault();
     this.setState({ loading: true, error: false, success: false }, () => {
       this.props.addUsersToCommunity(this.state.users.filter(user => user.email), this.state.message)
-      .then(({ community }) => {
-        this.setState({ loading: false, success: true }, () => {
-          console.log(community)
-        })
+      .then(() => {
+        this.setState({
+          loading: false,
+          success: true,
+          users: [{
+            email: '',
+            firstname: '',
+            lastname: '',
+          }],
+         })
       })
       .catch(e => {
         console.log(e);
@@ -79,13 +85,13 @@ class OrganisationAddUser extends React.Component {
                   <Form.Input
                     width={5}
                     value={user.email}
-                    onChange={() => this.handleChange(i)}
+                    onChange={(ev) => this.handleChange(i, ev, ev.target)}
                     name="email"
                     placeholder="Email"
                     required={users.length === 1 || (users.length - 1) !== i}
                   />
-                  <Form.Input width={5} value={user.firstname} onChange={() => this.handleChange(i)} name= "firstname" placeholder="Prénom" />
-                  <Form.Input width={5} value={user.lastname} onChange={() => this.handleChange(i)} name="lastname" placeholder='Nom' />
+                  <Form.Input width={5} value={user.firstname} onChange={(ev) => this.handleChange(i, ev, ev.target)} name= "firstname" placeholder="Prénom" />
+                  <Form.Input width={5} value={user.lastname} onChange={(ev) => this.handleChange(i, ev, ev.target)} name="lastname" placeholder='Nom' />
                   {(user.email || user.firstname || user.lastname) && (
                     <Form.Button
                       onClick={() => this.handleRemove(i)}

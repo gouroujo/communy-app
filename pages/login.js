@@ -3,7 +3,7 @@
 import React from 'react'
 import { withApollo, compose } from 'react-apollo'
 import Link from 'next/link';
-import { Button } from 'semantic-ui-react'
+import { Button, Segment } from 'semantic-ui-react'
 
 import withData from 'lib/withData'
 import getUser from 'lib/getUser'
@@ -49,13 +49,16 @@ class Login extends React.Component {
             </Button>
           </Link>
         </AppTitle>
-        <LoginForm />
+        <Segment style={{ maxWidth: 500, textAlign: 'center', margin: '0 auto' }}>
+          <LoginForm />
+          <div style={{ textAlign: 'center'}}>
+            <Link href="/reset">
+              <a style={{ color: 'black' }}>Mot de passe perdu ?</a>
+            </Link>
+          </div>
+        </Segment>
 
-        <div style={{ textAlign: 'center'}}>
-          <Link href="/reset">
-            <a style={{ color: 'black' }}>Mot de passe perdu ?</a>
-          </Link>
-        </div>
+
 
       </Layout>
     )

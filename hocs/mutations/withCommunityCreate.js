@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 
-import { fragment as CommunityViewFragment } from 'containers/Community/Container'
+import { fragment as CommunityContainerFragment } from 'containers/Community/Container'
 import { query as CommunityListQuery } from 'containers/Community/List'
 import { query as UserQuery } from 'hocs/queries/withUser'
 
@@ -10,10 +10,10 @@ export const mutation = gql`
     $input: OrganisationInput!
   ) {
     community: createOrganisation (input: $input) {
-      ...CommunityViewFragment
+      ...CommunityContainerFragment
     }
   }
-  ${CommunityViewFragment}
+  ${CommunityContainerFragment}
 `;
 
 export default graphql(mutation, {

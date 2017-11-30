@@ -13,10 +13,8 @@ export const mutation = gql`
       input: $input
     ) {
       id
-      parts {
-        startTime
-        endTime
-      }
+      startTime
+      endTime
       title
       description
     }

@@ -73,6 +73,12 @@ app.prepare().then(() => {
     }))
   })
 
+  server.get('/communities/:communityId/edit', (req, res) => {
+    return app.render(req, res, '/community-edit', Object.assign(req.query, {
+      communityId: req.params.communityId
+    }))
+  })
+
 
 
   server.get('*', (req, res) => {

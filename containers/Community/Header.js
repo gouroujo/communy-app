@@ -55,7 +55,9 @@ class CommunityHeader extends React.PureComponent {
           src={community && community.cover}
           communityId={communityId}>
           {(community && community.registration && community.registration.role === 'ADMIN') && (
-              <Link href={`/communitys/${communityId}/edit`}>
+              <Link
+                href={`/community-edit?communityId=${communityId}`}
+                as={`/communities/${communityId}/edit`}>
                 <Button key={1} icon='edit' size="mini" label={isMobile ? null : "Modifier"}/>
               </Link>
           )}
