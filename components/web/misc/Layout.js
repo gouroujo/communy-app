@@ -1,10 +1,11 @@
-import Menu from 'containers/misc/Menu'
 
-export default ({ children }) => (
+export default ({ colors = [], menu, header, children }) => (
   <div className="container">
-    <div className="background" />
-    <Menu />
-    <div>
+    {menu}
+    <div className="background">
+      {header}
+    </div>
+    <div className="content">
       {children}
     </div>
     <style jsx global>{`
@@ -13,29 +14,46 @@ export default ({ children }) => (
       }
     `}</style>
     <style jsx>{`
-      .container {
-        padding-top: 100px;
-      }
+
       .background {
-        z-index: -1;
-        position: absolute;
+        overflow: hidden;
+        z-index: 1;
+        position: relative;
         top: 0;
         left: 0;
         right: 0;
-        height: 80vh;
-        background-image: url("/static/images/overlay.png"),radial-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2)), linear-gradient(45deg, #17ab61, #1760aa);
+        background-image: url("/static/images/overlay.png"),radial-gradient(rgba(0,0,0,0),rgba(0,0,0,0.2)), linear-gradient(45deg, ${colors.toString()});
         transition: background-image 4500ms;
+        padding: 100px 0.2em 15vw 0.2em;
+        margin-bottom: -15vw;
       }
-      .background:before {
+      .background:after {
         content: "";
         display: block;
         position: absolute;
         border-radius: 100%;
-        height: 200px;
-        background-color: #e7e7e7;
+        bottom: -5vw;
         right: -100px;
         left: -100px;
-        top: calc(80vh - 100px);
+        height: 10vw
+        background-color: #e7e7e7;
+        z-index: -1;
+       }
+       .content {
+         position: relative;
+         z-index: 2;
+       }
+       @media only screen and (max-width: 576px) {
+         .container {
+           position: absolute;
+           top: 0;
+           right: 0;
+           left: 0;
+           /*overflow-x: hidden;*/
+         }
+         .background {
+           padding-top: 60px;
+         }
        }
     `}</style>
   </div>

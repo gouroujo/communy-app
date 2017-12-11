@@ -6,8 +6,9 @@ export default ({ communities = [], Action }) => (
   <Card.Group textAlign='center'>
     {communities.map(community => (
       <Card key={community.id} style={{ textAlign: 'initial'}}>
+        <Image src={community.cover} />
         <Card.Content>
-          <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
+          <Image floated='right' size='mini' src={community.logo} />
           <Card.Header>
             <Link
               href={`/community?communityId=${community.id}`}

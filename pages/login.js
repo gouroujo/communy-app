@@ -1,5 +1,3 @@
-// import Head from 'next/head'
-
 import React from 'react'
 import { withApollo, compose } from 'react-apollo'
 import Link from 'next/link';
@@ -7,48 +5,45 @@ import { Button, Segment } from 'semantic-ui-react'
 
 import withData from 'lib/withData'
 import getUser from 'lib/getUser'
+import redirect from 'lib/redirect'
 
+import Menu from 'containers/misc/Menu'
 import Layout from 'components/web/misc/Layout'
 import AppTitle from 'components/web/misc/Title'
 
 import LoginForm from 'containers/User/LoginForm'
 
 class Login extends React.Component {
+
   static async getInitialProps (context, apolloClient) {
-    const user = await getUser(context, apolloClient)
+    const { user } = await getUser(context, apolloClient)
+
     if (user) {
-      // redirect(context, '/app')
+      redirect(context, '/')
     }
 
     return { user }
   }
 
-  // signout = () => {
-  //   document.cookie = cookie.serialize('token', '', {
-  //     maxAge: -1 // Expire the cookie immediately
-  //   })
-  //
-  //   // Force a reload of all the current queries now that the user is
-  //   // logged in, so we don't accidentally leave any state around.
-  //   this.props.client.resetStore().then(() => {
-  //     // Redirect to a more useful page when signed out
-  //     redirect({}, '/signin')
-  //   })
-  // }
-
   render () {
 
     return (
-      <Layout title="Communy - Connexion">
-        <AppTitle header="Connexion">
-          Connectez-vous pour accéder à votre espace personnel
-          <br /><br />
-          <Link href="/signin">
-            <Button basic inverted>
-              Pas encore de compte ? S'inscrire
-            </Button>
-          </Link>
-        </AppTitle>
+      <Layout
+        title="Communy - Connexion"
+        colors={["#17ab61", "#1760aa"]}
+        menu={<Menu logo="/static/images/logo_white.png"/>}
+        header={(
+          <AppTitle header="Connexion">
+            Connectez-vous pour accéder à votre espace personnel
+            <br /><br />
+            <Link href="/signin">
+              <Button basic inverted>
+                Pas encore de compte ? S'inscrire
+              </Button>
+            </Link>
+          </AppTitle>
+        )}>
+
         <Segment style={{ maxWidth: 500, textAlign: 'center', margin: '0 auto' }}>
           <LoginForm />
           <div style={{ textAlign: 'center'}}>

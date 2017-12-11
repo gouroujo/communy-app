@@ -106,9 +106,10 @@ export default ({ communities = []}) => (
         height: 100px;
         border: 2px solid rgba(255, 255, 255, 0.7);
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgba(255, 255, 255, 1);
         background-position: center;
-        background-size: cover;
+        background-size: contain;
+        background-repeat: no-repeat;
         transition: 450ms all;
         line-height: 100px;
         text-align: center;
@@ -118,6 +119,7 @@ export default ({ communities = []}) => (
       .item.add .logo {
         background: none;
         border: none;
+        opacity: 0.7;
       }
       .title {
         opacity: 0;
@@ -141,6 +143,7 @@ export default ({ communities = []}) => (
         opacity: 1;
       }
       .backdrop {
+        border-radius: 7px;
         opacity: 0;
         transition: 450ms opacity;
         position: absolute;

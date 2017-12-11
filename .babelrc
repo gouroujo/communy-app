@@ -32,8 +32,5 @@
     "development": {
       "plugins": ["inline-dotenv"]
     },
-    "production": {
-      "plugins": [["inline-dotenv", {"path": ".env.production"}], "transform-inline-environment-variables"]
-    }
   }
 }

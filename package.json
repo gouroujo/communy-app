@@ -7,9 +7,9 @@
     "clean": "rimraf ./node_modules/.cache",
     "docker:login": "docker login",
     "docker:qemu": "docker run --rm --privileged multiarch/qemu-user-static:register --reset",
-    "docker:build": "docker build -t communy/app .",
-    "docker:push": "docker push communy/app",
-    "deploy": "npm run docker:login && npm run docker:qemu && npm run docker:build && npm run docker:push"
+    "docker:build": "docker build -t gouroujo/communy-app:$(git rev-parse --abbrev-ref HEAD) .",
+    "docker:push": "docker push gouroujo/communy-app:$(git rev-parse --abbrev-ref HEAD)",
+    "deploy": "npm run build && npm run docker:build && npm run docker:push"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.1",

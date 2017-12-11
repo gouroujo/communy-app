@@ -68,9 +68,7 @@ class CommunityHeader extends React.PureComponent {
         <Logo
           src={community && community.logo}
           communityId={communityId}
-          style={{
-            margin: isMobile ? '-60px auto 0 auto' : '-60px 10px 0 50px'
-          }}
+          className="logo"
         />
         <div style={{
           margin: isMobile ? '0.2rem 5px' : '-70px 0 30px 0',
@@ -79,16 +77,20 @@ class CommunityHeader extends React.PureComponent {
         }}>
           <h1>{community && community.title}</h1>
           <CommunityType type={community && community.type} />
+          <br/>
+          {isMobile && <UserRegistrationButtons communityId={community.id} community={community} registration={community.registration} />}
         </div>
-        <div style={{
-          position: 'absolute',
-          right: 10,
-          top: 310
-        }}>
-          {community && (
-            <UserRegistrationButtons communityId={community.id} community={community} registration={community.registration} />
-          )}
-        </div>
+        {!isMobile && (
+          <div style={{
+            position: 'absolute',
+            right: 10,
+            top: 310
+          }}>
+            {community && (
+              <UserRegistrationButtons communityId={community.id} community={community} registration={community.registration} />
+            )}
+          </div>
+        )}
       </div>
     )
 

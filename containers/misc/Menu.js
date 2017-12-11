@@ -47,9 +47,9 @@ class AppMenu extends React.PureComponent {
     const { user } = this.props;
     if (user) {
       return (
-        <Menu value={this.state ? this.state.value : 0} mobile={false}>
+        <Menu value={this.state ? this.state.value : 0}>
           <Link href="/">
-            <img src="/static/images/logo_white.png" alt="Communy" />
+            <img src={this.props.logo} alt="Communy" />
           </Link>
           {/* <Link href="/inbox">
           <div className="menu-item">
@@ -71,18 +71,29 @@ class AppMenu extends React.PureComponent {
     }
 
     return (
-      <Menu value={this.state ? this.state.value : 0} mobile={false}>
+      <Menu value={this.state ? this.state.value : 0}>
         <Link href="/">
-          <img src="/static/images/logo_white.png" alt="Communy" />
+          <img src={this.props.logo} alt="Communy" />
         </Link>
         <div className="menu-item">
           <Link href="/login">
             <Button primary>Connexion</Button>
           </Link>
           <Link href="/signin">
-            <Button>Inscription</Button>
+            <Button className="signin">Inscription</Button>
           </Link>
+          <style jsx>{`
+            .menu-item > :global(.signin) {
+              display: none;
+            }
+            @media only screen and (min-width: 576px) {
+              .menu-item > :global(.signin) {
+                display: inline-block;
+              }
+            }
+          `}</style>
         </div>
+
       </Menu>
     )
   }

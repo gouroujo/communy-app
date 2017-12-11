@@ -10,8 +10,6 @@ import { Container, Card, Dimmer, Loader, Sticky, Header, Icon, Button } from 's
 import CommunityHeader from 'containers/Community/Header'
 import CommunityMenu from 'components/web/Community/Menu'
 
-import AppTitle from 'containers/misc/AppTitle'
-
 export const fragment = gql`
   fragment CommunityContainerFragment on Organisation {
     id
@@ -93,48 +91,42 @@ class CommunityContainer extends React.PureComponent {
     } = this.props;
 
     return (
-      <div>
-        <AppTitle header="Bienvenue sur votre future communauté">
-          Inscrivez-vous pour rejoindre {community && community.title}
-        </AppTitle>
-        <Container>
-          <Dimmer.Dimmable as={Card} dimmed={loading} fluid className="community">
+      <Container>
+        <Dimmer.Dimmable as={Card} dimmed={loading} fluid className="community">
 
-            <Dimmer active={loading} inverted>
-              <Loader>Chargement de la communauté...</Loader>
-            </Dimmer>
+          <Dimmer active={loading} inverted>
+            <Loader>Chargement de la communauté...</Loader>
+          </Dimmer>
 
-            <Dimmer active={!loading && !community} inverted>
-              <Header as='h2' icon textAlign='center'>
-                <Icon name='search' circular/>
-                <Header.Content>
-                  La communauté<br />
-                  "{communityId}"<br />
-                  n'a pas été trouvée<br /><br />
-                </Header.Content>
-                <Header.Subheader>
-                  <Link href="/"><Button primary>Retour</Button></Link>
-                </Header.Subheader>
-              </Header>
-            </Dimmer>
+          <Dimmer active={!loading && !community} inverted>
+            <Header as='h2' icon textAlign='center'>
+              <Icon name='search' circular/>
+              <Header.Content>
+                La communauté<br />
+                "{communityId}"<br />
+                n'a pas été trouvée<br /><br />
+              </Header.Content>
+              <Header.Subheader>
+                <Link href={process.env.INDEX_PAGE} as="/"><Button primary>Retour</Button></Link>
+              </Header.Subheader>
+            </Header>
+          </Dimmer>
 
-            <Head>
-              <title>Communy - {community ? community.title : 'Chargement...'}</title>
-            </Head>
-            <CommunityHeader communityId={communityId} />
-            <div className="content" ref={this.handleContextRef}>
-              <Sticky context={this.state.contextRef} offset={60} className="sticky" onStick={this.onStick} onUnstick={this.onUnstick}>
-                <CommunityMenu communityId={communityId} />
-              </Sticky>
-              <div className="children">
-                {this.props.children}
-              </div>
-
+          <Head>
+            <title>Communy - {community ? community.title : 'Chargement...'}</title>
+          </Head>
+          <CommunityHeader communityId={communityId} />
+          <div className="content" ref={this.handleContextRef}>
+            <Sticky context={this.state.contextRef} offset={60} className="sticky" onStick={this.onStick} onUnstick={this.onUnstick}>
+              <CommunityMenu communityId={communityId} />
+            </Sticky>
+            <div className="children">
+              {this.props.children}
             </div>
 
-          </Dimmer.Dimmable>
+          </div>
 
-        </Container>
+        </Dimmer.Dimmable>
         <style jsx>{`
           .content {
             flex: 1;
@@ -166,7 +158,7 @@ class CommunityContainer extends React.PureComponent {
             }
           }
         `}</style>
-      </div>
+      </Container>
     )
   }
 }

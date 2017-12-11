@@ -60,7 +60,7 @@ export default class Communities extends React.PureComponent {
     return (
       <div style={{ textAlign: 'center'}}>
         <SelectTag
-          inverted
+          // inverted
           tags={this.state.filter.categories}
           onChange={this.handleChangeTag} />
         <CommunityListWithData

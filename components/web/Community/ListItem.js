@@ -5,8 +5,9 @@ import CommunityType from 'components/web/Community/Type'
 
 export default ({ community = {}, action }) => (
   <Card>
+    <Image src={community.cover} />
     <Card.Content>
-      <Image floated='right' size='mini' src='/assets/images/avatar/large/steve.jpg' />
+      <Image floated='right' size='mini' src={community.logo} />
       <Card.Header>
         <Link
           href={`/community?communityId=${community.id}`}

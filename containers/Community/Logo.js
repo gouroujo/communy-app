@@ -20,7 +20,7 @@ class CommunityLogo extends React.PureComponent {
   render() {
     const {
       src,
-      style
+      style,
     } = this.props
 
     return (
@@ -43,26 +43,34 @@ class CommunityLogo extends React.PureComponent {
         </div>
 
         <style jsx>{`
-          .ui.logo {
+          .logo {
             height: 150px;
             width: 150px
-            background-color: #587483;
+            background-color: #fff;
             background-position: center;
-            background-size: cover;
+            background-size: contain;
+            background-repeat: no-repeat;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             position: relative;
-            border: 2px solid white;
+            border: 2px solid #e6e6e6;
             border-radius: 10px;
+            margin: -60px 10px 0 50px;
           }
 
-          .ui.logo > .upload {
+          .logo > .upload {
             position: absolute;
             top: 10px;
             right: 10px;
+          }
+
+          @media only screen and (max-width: 576px) {
+            .logo {
+              margin: -60px auto 0 auto;
+            }
           }
         `}</style>
       </div>

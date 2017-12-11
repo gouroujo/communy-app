@@ -8,6 +8,7 @@ import { Button, Segment } from 'semantic-ui-react'
 import withData from 'lib/withData'
 import getUser from 'lib/getUser'
 
+import Menu from 'containers/misc/Menu'
 import Layout from 'components/web/misc/Layout'
 import AppTitle from 'components/web/misc/Title'
 
@@ -23,32 +24,24 @@ class Login extends React.Component {
     return { user }
   }
 
-  // signout = () => {
-  //   document.cookie = cookie.serialize('token', '', {
-  //     maxAge: -1 // Expire the cookie immediately
-  //   })
-  //
-  //   // Force a reload of all the current queries now that the user is
-  //   // logged in, so we don't accidentally leave any state around.
-  //   this.props.client.resetStore().then(() => {
-  //     // Redirect to a more useful page when signed out
-  //     redirect({}, '/signin')
-  //   })
-  // }
-
   render () {
 
     return (
-      <Layout title="Communy - Mot de passe perdu">
-        <AppTitle header="Mot de passe perdu">
-          Entrez votre adresse email pour définir un nouveau mot de passe
-          <br /><br />
-          <Link href="/signin">
-            <Button basic inverted>
-              Pas encore de compte ? S'inscrire
-            </Button>
-          </Link>
-        </AppTitle>
+      <Layout
+        title="Communy - Mot de passe perdu"
+        colors={["#17ab61", "#1760aa"]}
+        menu={<Menu logo="/static/images/logo_white.png"/>}
+        header={(
+          <AppTitle header="Mot de passe perdu">
+            Entrez votre adresse email pour définir un nouveau mot de passe
+            <br /><br />
+            <Link href="/signin">
+              <Button basic inverted>
+                Pas encore de compte ? S'inscrire
+              </Button>
+            </Link>
+          </AppTitle>
+        )}>
         <Segment style={{ maxWidth: 500, textAlign: 'center', margin: '0 auto' }}>
           <ResetForm />
 

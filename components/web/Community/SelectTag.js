@@ -44,7 +44,7 @@ export default class SelectTag extends React.Component {
         style={{ margin: 5 }}
         animated='fade'
         primary={tags.includes(id)}
-        size='massive'
+        size='big'
         {...pick(props, ['style', 'basic', 'size', 'color', 'inverted'])}>
         <Button.Content hidden>
           <span style={{ fontSize: '1rem'}}>{label}</span>

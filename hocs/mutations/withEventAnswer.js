@@ -1,6 +1,7 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+// import { fragment as EventContainerFragment } from 
 
 export default graphql(gql`
   mutation eventAnswer(
@@ -48,22 +49,7 @@ export default graphql(gql`
         }
       },
       // update: (store, { data: { event } }) => {
-      //   const data = store.readFragment({
-      //     id: dataIdFromObject({id: ownProps.userId, __typename: 'User'}),
-      //     fragment: UserParticipationFragment,
-      //     fragmentName: 'UserParticipationFragment',
-      //     variables: { eventId: ownProps.eventId}
-      //   })
-      //   store.writeFragment({
-      //     id: dataIdFromObject({id: ownProps.userId, __typename: 'User'}),
-      //     fragment: UserParticipationFragment,
-      //     fragmentName: 'UserParticipationFragment',
-      //     variables: { eventId: ownProps.eventId},
-      //     data: {
-      //       ...data,
-      //       participation: event.participation
-      //     }
-      //   });
+      //   const data = store.readQuery()
       // },
     }),
   })

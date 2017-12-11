@@ -1,5 +1,6 @@
 const express = require('express')
 const next = require('next')
+const fetch = require('isomorphic-unfetch')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -8,12 +9,42 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   const server = express()
+  server.set('trust proxy', 1);
 
-  // server.use((req, res, next) => {
-  //   res.setHeader('charset', 'utf-8')
-  //   res.setHeader('Vary', 'User-Agent')
-  //   next()
-  // });
+  server.use(async (req, res, next) => {
+    res.setHeader('charset', 'utf-8')
+    // res.setHeader('Vary', 'User-Agent')
+
+    if (req.query.confirm_token) {
+      try {
+        const user = await fetch(`${process.env.SSR_ENDPOINT || 'http://localhost:3030'}/auth/confirm`, {
+          method: 'POST',
+	        body: JSON.stringify({
+            token: req.query.confirm_token
+          }),
+	        headers: { 'Content-Type': 'application/json' },
+        })
+        res.locals.confirm_token = user
+      } catch(e) {
+        res.locals.confirm_token = false
+      }
+    }
+    
+    next()
+  });
+
+
+  server.get('/', (req, res) => {
+    return app.render(req, res, process.env.INDEX_PAGE || '/index', Object.assign(req.query, res.locals))
+  })
+
+  server.get('/join', (req, res) => {
+    return app.render(req, res, '/company-create', req.query)
+  })
+
+  server.get('/communities', (req, res) => {
+    return app.render(req, res, '/communities', req.query)
+  })
 
   server.get('/communities/create', (req, res) => {
     return app.render(req, res, '/community-create', req.query)

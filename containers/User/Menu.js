@@ -21,20 +21,13 @@ class UserMenu extends React.PureComponent {
   }
 
   render() {
-    const { mobile, user } = this.props
+    const { user } = this.props
     return (
       <div className={this.props.className}>
         <Dropdown trigger={(
           <div>
             <Image avatar src={user && user.avatar} />
-            <span style={{
-              marginBottom: '-0.3em',
-              maxWidth: '20vw',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              display: 'inline-block'
-            }}>{ mobile || !user ? '' : user.fullname}</span>
+            <span className="username">{user && user.fullname}</span>
           </div>
         )} pointing='top right' icon={null}>
 
@@ -49,6 +42,22 @@ class UserMenu extends React.PureComponent {
           </Dropdown.Menu>
 
         </Dropdown>
+        <style jsx>{`
+          .username {
+            margin-bottom: -0.3em;
+            max-width: 20vw;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: none;
+          }
+          @media only screen and (min-width: 576px) {
+            .username {
+              display: inline-block;
+            }
+          }
+
+        `}</style>
       </div>
     )
   }

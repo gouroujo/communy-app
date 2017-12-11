@@ -9,13 +9,14 @@ ENV NODE_ENV production
 
 
 # Bundle app source
-COPY ./static /usr/src/static
-COPY ./.next /usr/src/.next
-COPY ./server.js /usr/src/server.js
 COPY ./package.json /usr/src/package.json
 COPY ./yarn.lock /usr/src/yarn.lock
 
 RUN yarn install --production
+
+COPY ./static /usr/src/static
+COPY ./.next /usr/src/.next
+COPY ./server.js /usr/src/server.js
 
 EXPOSE 3000
 
