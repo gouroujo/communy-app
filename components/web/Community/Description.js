@@ -1,6 +1,6 @@
-export default ({ community = {} }) => (
+export default ({ community }) => (
   <div
     dangerouslySetInnerHTML={{
-      __html: community.description ||'Aucune description',
+      __html: (community && community.description) ||'Aucune description',
     }}/>
 )

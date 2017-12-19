@@ -3,40 +3,39 @@ import gql from 'graphql-tag'
 import Link from 'next/link'
 import { List, Image } from 'semantic-ui-react'
 
+import Answer from 'components/web/Event/Answer'
 import AnswerButtons from 'containers/Event/AnswerButtons'
 
+import withCommunityRegistration from 'hocs/queries/withCommunityRegistration'
 import withEvent from 'hocs/queries/withEvent'
-
-export const fragment = gql`
-  fragment EventParticipationFragment on Event {
-    id
-    participations {
-      id
-      answer
-      user {
-        id
-        fullname
-        avatar
-      }
-    }
-  }
-`
+import UserMinFragment from 'fragments/UserMin'
+import ParticipationFragment from 'fragments/Participation'
 
 export const query = gql`
-  query EventView(
+  query EventParticipations(
     $eventId: ID!
   ) {
     event (id: $eventId ) {
-      ...EventParticipationFragment
+      id
+      participations {
+        ...ParticipationFragment
+        user {
+          ...UserMinFragment
+        }
+      }
     }
   }
-  ${fragment}
+  ${ParticipationFragment}
+  ${UserMinFragment}
 `
 
 class EventView extends React.PureComponent {
+  componentDidMount() {
+    this.props.data.startPolling(2000);
+  }
 
   render() {
-    const { event, communityId } = this.props;
+    const { event, registration, communityId } = this.props;
 
     return (
       <List selection verticalAlign='middle'>
@@ -47,13 +46,18 @@ class EventView extends React.PureComponent {
             as={`/communities/${communityId}/users/${participation.user.id}`}>
             <List.Item>
               <List.Content floated='right'>
-                <AnswerButtons
-                  userId={participation.user.id}
-                  eventId={event.id}
-                  event={event}
-                  participation={participation}
-                  compact
-                />
+                {registration && registration.permissions.includes('event_add_user') ? (
+                  <AnswerButtons
+                    userId={participation.user.id}
+                    eventId={event.id}
+                    event={event}
+                    participation={participation}
+                    compact
+                  />
+                ) : (
+                  <Answer answer={participation && participation.answer}/>
+                )}
+
               </List.Content>
               <List.Content>
                 <List.Header>
@@ -69,4 +73,4 @@ class EventView extends React.PureComponent {
   }
 }
 
-export default withEvent(query)(EventView)
+export default withEvent(query)(withCommunityRegistration(EventView))

@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 
 export const mutation = gql`
   mutation createEvent(
-    $input: EventInput!
+    $input: EventCreateInput!
     $communityId: ID!
   ) {
     event: createEvent(

@@ -1,7 +1,7 @@
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-// import { query as OrganisationUsersQuery } from 'hocs/queries/withOrganisationUsers';
+import { query as CommunityRegistrationListQuery } from 'containers/Community/RegistrationList'
 
 export const mutation = gql`
   mutation addUsersToCommunity (
@@ -28,6 +28,14 @@ export default graphql(mutation,
           communityId: ownProps.communityId,
           input: { users, message }
         },
+        refetchQueries: [
+          {
+            query: CommunityRegistrationListQuery,
+            variables: {
+              communityId: ownProps.communityId,
+            }
+          }
+        ]
       }),
     }),
 

@@ -10,9 +10,10 @@ export default (query) => {
         userId: ownProps.userId,
       },
     }),
-    props: ({ data: { loading, event } }) => ({
-      loading,
-      event,
+    props: ({ data }) => ({
+      data,
+      loading: data.loading,
+      event: data.event,
     }),
   })
 }

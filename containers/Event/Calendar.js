@@ -1,33 +1,13 @@
 import React from 'react'
 import gql from 'graphql-tag'
-
-import withEvents from 'hocs/queries/withEvents'
-
-import Calendar from 'components/web/Event/Calendar'
 import moment from 'moment'
 
-export const fragment = gql`
-  fragment EventCalendarFragment on Event {
-    id
-    title
-    description
-    duration
-    startTime
-    endTime
-    nanswer
-    nyes
-    nno
-    nmb
-    participation {
-      id
-      answer
-    }
-    organisation {
-      id
-      title
-    }
-  }
-`
+import Calendar from 'components/web/Event/Calendar'
+
+import withEvents from 'hocs/queries/withEvents'
+import EventFragment from 'fragments/Event'
+import CommunityMinFragment from 'fragments/CommunityMin'
+import ParticipationFragment from 'fragments/Participation'
 
 export const query = gql`
   query EventList(
@@ -42,10 +22,18 @@ export const query = gql`
       before: $before
       after: $after
     ) {
-      ...EventCalendarFragment
+      ...EventFragment
+      participation {
+        ...ParticipationFragment
+      }
+      community: organisation {
+        ...CommunityMinFragment
+      }
     }
   }
-  ${fragment}
+  ${EventFragment}
+  ${CommunityMinFragment}
+  ${ParticipationFragment}
 `
 
 class EventCalendar extends React.PureComponent {

@@ -1,38 +1,17 @@
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import CurrentUserFragment from 'fragments/CurrentUser'
 
 export const query = gql`
   query UserMenu {
     user {
-      id
-      firstname
-      lastname
-      fullname
-      norganisations
-      email
-      hasCredentials
-      nunreadMessage
-      avatar
-      phone1
-      birthday
-      birthplace
-      phone2
-      registrations {
-        id
-        role
-        ack
-        confirm
-        organisation {
-          id
-          title
-          cover
-          logo
-        }
-      }
+      ...CurrentUserFragment
     }
   }
+  ${CurrentUserFragment}
+
   `
-  
+
 export default graphql(query,
 {
   props: ({ data: { loading, user } }) => ({

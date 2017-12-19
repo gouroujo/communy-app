@@ -17,16 +17,14 @@ class Login extends React.Component {
 
   static async getInitialProps (context, apolloClient) {
     const { user } = await getUser(context, apolloClient)
-
     if (user) {
       redirect(context, '/')
     }
 
-    return { user }
+    return { user, ...context.query }
   }
 
   render () {
-
     return (
       <Layout
         title="Communy - Connexion"
@@ -36,7 +34,7 @@ class Login extends React.Component {
           <AppTitle header="Connexion">
             Connectez-vous pour accéder à votre espace personnel
             <br /><br />
-            <Link href="/signin">
+            <Link href={{ pathname: '/signin', query: { target: this.props.target, as: this.props.as } }}>
               <Button basic inverted>
                 Pas encore de compte ? S'inscrire
               </Button>
@@ -45,9 +43,9 @@ class Login extends React.Component {
         )}>
 
         <Segment style={{ maxWidth: 500, textAlign: 'center', margin: '0 auto' }}>
-          <LoginForm />
+          <LoginForm target={this.props.target} as={this.props.as}/>
           <div style={{ textAlign: 'center'}}>
-            <Link href="/reset">
+            <Link href={{ pathname: '/reset', query: { target: this.props.target, as: this.props.as } }}>
               <a style={{ color: 'black' }}>Mot de passe perdu ?</a>
             </Link>
           </div>

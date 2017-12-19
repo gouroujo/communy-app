@@ -3,33 +3,16 @@ import gql from 'graphql-tag'
 
 import RegistrationLayout from 'components/web/Registration/Layout'
 import RegistrationUser from 'components/web/Registration/User'
+import RegistrationRoleButton from 'components/web/Registration/RoleButton'
 
 import ParticipationList from 'containers/Registration/CommunityParticipationList'
-
 import RegistrationCommunityButtons from 'containers/Registration/CommunityButtons'
 
 import withCommunity from 'hocs/queries/withCommunity'
+import withRegistrationSetRole from 'hocs/mutations/withRegistrationSetRole'
 
-
-export const fragment = gql`
-  fragment CommunityRegistrationFragment on Organisation {
-    id
-    registration (userId: $userId) {
-      id
-      ack
-      confirm
-      role
-      user {
-        id
-        fullname
-        avatar
-        email
-        phone1
-        phone2
-      }
-    }
-  }
-`
+import UserFragment from 'fragments/User'
+import RegistrationFragment from 'fragments/Registration'
 
 export const query = gql`
   query CommunityRegistration(
@@ -37,10 +20,20 @@ export const query = gql`
     $userId: ID
   ) {
     community: organisation (id: $communityId ) {
-      ...CommunityRegistrationFragment
+      id
+      ownregistration: registration {
+        ...RegistrationFragment
+      }
+      registration (userId: $userId) {
+        ...RegistrationFragment
+        user {
+          ...UserFragment
+        }
+      }
     }
   }
-  ${fragment}
+  ${UserFragment}
+  ${RegistrationFragment}
 `
 
 class RegistrationCommunity extends React.PureComponent {
@@ -49,7 +42,8 @@ class RegistrationCommunity extends React.PureComponent {
     const { community, communityId, userId } = this.props
 
     const registration = community && community.registration
-
+    const ownregistration = community && community.ownregistration
+    const SetRoleButtons = withRegistrationSetRole(RegistrationRoleButton)
     return (
       <RegistrationLayout aside={
         <div style={{ textAlign: 'center' }}>
@@ -58,6 +52,12 @@ class RegistrationCommunity extends React.PureComponent {
             registration={registration}
             userId={registration && registration.user && registration.user.id}
             communityId={communityId}
+          />
+          <SetRoleButtons
+            permissions={ownregistration && ownregistration.permissions}
+            registration={registration}
+            communityId={communityId}
+            userId={userId}
           />
         </div>
       }>

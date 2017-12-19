@@ -15,8 +15,8 @@ export default ({ day, date, events = []}) => {
       <div className="events">
         {events.map(event => (
           <div key={event.id} className={`MonthEvent ${event.participation && event.participation.answer}`}>
-            <Link href={`/community-event?communityId=${event.organisation.id}&eventId=${event.id}`}
-              as={`/communities/${event.organisation.id}/events/${event.id}`}
+            <Link href={`/community-event?communityId=${event.community.id}&eventId=${event.id}`}
+              as={`/communities/${event.community.id}/events/${event.id}`}
             >
               <a className="title">{event.title}</a>
             </Link>

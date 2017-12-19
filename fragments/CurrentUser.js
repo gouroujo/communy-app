@@ -1,14 +1,12 @@
-import gql from 'graphql-tag';
-import UserFragment from 'fragments/User';
+import gql from 'graphql-tag'
+import UserFragment from 'fragments/User'
+import RegistrationFragment from 'fragments/Registration'
 
 export default gql`
   fragment CurrentUserFragment on User {
     ...UserFragment
     registrations {
-      id
-      role
-      ack
-      confirm
+      ...RegistrationFragment
       organisation {
         id
         title
@@ -17,5 +15,6 @@ export default gql`
       }
     }
   }
+  ${RegistrationFragment}
   ${UserFragment}
 `;

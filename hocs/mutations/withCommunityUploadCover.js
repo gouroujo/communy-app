@@ -39,7 +39,7 @@ const withCommunityUploadCover = (WrappedComponent) => {
         const formdata = new window.FormData();
         Object.keys(options).forEach(key => formdata.append(key, options[key]));
         formdata.append('file', file);
-        return window.fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+        return window.fetch(`https://api.cloudinary.com/v1_1/${window.__ENV__.CLOUDINARY_CLOUD_NAME}/image/upload`, {
           method: 'POST',
           body: formdata,
         })

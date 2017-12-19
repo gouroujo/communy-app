@@ -5,7 +5,7 @@ import Answer from './Answer'
 
 export default ({ events=[], nevents, action, communityId }) => (
   <div>
-    {(nevents > events.length) && (
+    {nevents && (nevents > events.length) && (
       <div>Voir Plus</div>
     )}
     <List divided selection verticalAlign='middle' style={{ textAlign: 'initial'}}>

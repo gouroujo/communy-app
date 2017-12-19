@@ -6,43 +6,34 @@ import EventHeader from 'components/web/Event/Header'
 
 import AnswerButtons from 'containers/Event/AnswerButtons'
 import AddUserButton from 'containers/Event/AddUserButton'
+import ToggleParticipation from 'containers/Event/ToggleParticipation'
 
+import withCommunityRegistration from 'hocs/queries/withCommunityRegistration'
 import withEvent from 'hocs/queries/withEvent'
 
-export const fragment = gql`
-  fragment EventContainerFragment on Event {
-    id
-    title
-    description
-    nanswer
-    nyes
-    nno
-    nmb
-    participation {
-      id
-      answer
-    }
-    startTime
-    endTime
-    duration
-  }
-`
+import EventFragment from 'fragments/Event'
+import ParticipationFragment from 'fragments/Participation'
 
 export const query = gql`
   query EventContainer(
     $eventId: ID!
+    $userId: ID
   ) {
     event (id: $eventId ) {
-      ...EventContainerFragment
+      ...EventFragment
+      participation (userId: $userId) {
+        ...ParticipationFragment
+      }
     }
   }
-  ${fragment}
+  ${EventFragment}
+  ${ParticipationFragment}
 `
 
 class EventContainer extends React.PureComponent {
 
   render() {
-    const { event, eventId, communityId } = this.props;
+    const { event, eventId, communityId, registration } = this.props;
     return (
       <div style={{ margin: '0 1em'}}>
         <Head>
@@ -52,13 +43,26 @@ class EventContainer extends React.PureComponent {
           event={event}
           eventId={eventId}
           communityId={communityId}>
-          <div>
-            <h5>Souhaitez-vous participez à cette activité ?</h5>
-            <AnswerButtons event={event} eventId={eventId} participation={event && event.participation} />
-          </div>
+
+          {registration && registration.permissions.includes('event_answer') && (
+            <div>
+              <h5>Souhaitez-vous participez à cette activité ?</h5>
+              <AnswerButtons event={event} eventId={eventId} participation={event && event.participation} />
+            </div>
+          )}
+
           <div style={{ margin: 5 }}>
-            <AddUserButton eventId={eventId} communityId={communityId} />
+            {registration && registration.permissions.includes('event_add_user') && (
+              <AddUserButton eventId={eventId} communityId={communityId} />
+            )}
           </div>
+
+          <div style={{ margin: 5 }}>
+            {registration && registration.permissions.includes('event_edit') && (
+              <ToggleParticipation event={event} eventId={eventId} communityId={communityId} />
+            )}
+          </div>
+
         </EventHeader>
         {this.props.children}
       </div>
@@ -66,4 +70,4 @@ class EventContainer extends React.PureComponent {
   }
 }
 
-export default withEvent(query)(EventContainer)
+export default withEvent(query)(withCommunityRegistration(EventContainer))

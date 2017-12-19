@@ -1,5 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
+import React from 'react'
+import Link from 'next/link'
+import { withRouter } from 'next/router'
 
 import { Button } from 'semantic-ui-react'
 import Menu from 'components/web/misc/Menu'
@@ -11,12 +12,9 @@ import withUser from 'hocs/queries/withUser';
 
 
 class AppMenu extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: 0,
-      isMobile: process.browser ? (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) < 480 : false
-    }
+  state = {
+    value: 0,
+    isMobile: process.browser ? (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) < 480 : false
   }
 
   componentDidMount() {
@@ -48,7 +46,7 @@ class AppMenu extends React.PureComponent {
     if (user) {
       return (
         <Menu value={this.state ? this.state.value : 0}>
-          <Link href="/">
+          <Link href={process.browser ? window.__ENV__.INDEX_PAGE : process.env.INDEX_PAGE} as="/">
             <img src={this.props.logo} alt="Communy" />
           </Link>
           {/* <Link href="/inbox">
@@ -72,14 +70,14 @@ class AppMenu extends React.PureComponent {
 
     return (
       <Menu value={this.state ? this.state.value : 0}>
-        <Link href="/">
+        <Link href={process.browser ? window.__ENV__.INDEX_PAGE : process.env.INDEX_PAGE} as="/">
           <img src={this.props.logo} alt="Communy" />
         </Link>
         <div className="menu-item">
-          <Link href="/login">
+          <Link href={{ pathname: '/login', query: { target: this.props.router.pathname, as: this.props.router.asPath } }}>
             <Button primary>Connexion</Button>
           </Link>
-          <Link href="/signin">
+          <Link href={{ pathname: '/signin', query: { target: this.props.router.pathname, as: this.props.router.asPath } }}>
             <Button className="signin">Inscription</Button>
           </Link>
           <style jsx>{`
@@ -99,4 +97,4 @@ class AppMenu extends React.PureComponent {
   }
 }
 
-export default withUser(AppMenu);
+export default withUser(withRouter(AppMenu))

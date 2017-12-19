@@ -9,9 +9,9 @@ import { Dropdown, Image } from 'semantic-ui-react'
 class UserMenu extends React.PureComponent {
   handleSignOut = () => {
     document.cookie = cookie.serialize('token', '', {
-      maxAge: -1 // Expire the cookie immediately
+      expires: 0, // Expire the cookie immediately
+      path: '/'
     })
-
     // Force a reload of all the current queries now that the user is
     // logged in, so we don't accidentally leave any state around.
     this.props.client.resetStore().then(() => {

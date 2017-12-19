@@ -37,9 +37,12 @@ class OrganisationForm extends React.PureComponent {
       description: this.state.organisation.description,
       type: this.state.organisation.type,
       categories: this.state.organisation.categories,
-    }).then(res => {
-      this.setState({ loading: false, success: true }, this.props.callback ? () => this.props.callback(res) : null);
-      return res;
+    })
+    .then(res => {
+      console.log(res)
+      return new Promise(resolve => {
+        this.setState({ loading: false, success: true }, () => resolve(res))
+      })
     });
   }
 

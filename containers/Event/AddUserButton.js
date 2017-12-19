@@ -5,6 +5,7 @@ import AnswerButtons from 'containers/Event/AnswerButtons'
 
 import { withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
+import UserParticipationFragment from 'fragments/UserParticipation'
 
 class AddUserButton extends React.PureComponent {
   constructor(props) {
@@ -41,14 +42,12 @@ class AddUserButton extends React.PureComponent {
                 id
                 fullname
                 avatar
-                participation (eventId: $eventId) {
-                  id
-                  answer
-                }
+                ...UserParticipationFragment
               }
             }
           }
         }
+        ${UserParticipationFragment}
       `,
       variables: {
         search: this.state.search,

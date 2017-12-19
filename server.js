@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet');
 const next = require('next')
 const fetch = require('isomorphic-unfetch')
 
@@ -9,33 +10,67 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
   const server = express()
-  server.set('trust proxy', 1);
+  server.set('trust proxy', 1)
+  server.use(helmet())
 
-  server.use(async (req, res, next) => {
+  server.use((req, res, next) => {
     res.setHeader('charset', 'utf-8')
     // res.setHeader('Vary', 'User-Agent')
-
+    const promises = []
     if (req.query.confirm_token) {
-      try {
-        const user = await fetch(`${process.env.SSR_ENDPOINT || 'http://localhost:3030'}/auth/confirm`, {
+      promises.push(
+        fetch(`${process.env.SSR_ENDPOINT || 'http://localhost:3030'}/auth/confirm`, {
           method: 'POST',
-	        body: JSON.stringify({
+          body: JSON.stringify({
             token: req.query.confirm_token
           }),
-	        headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json' },
         })
-        res.locals.confirm_token = user
-      } catch(e) {
-        res.locals.confirm_token = false
-      }
+        .then(user => {
+          res.locals.confirm_token = user
+        })
+        .catch(e => {
+          console.log(e.message)
+          res.locals.confirm_token = false
+        })
+      )
     }
-    
-    next()
-  });
 
+    if (req.query.join_token) {
+      promises.push(
+        fetch(`${process.env.SSR_ENDPOINT || 'http://localhost:3030'}/auth/join`, {
+          method: 'POST',
+          body: JSON.stringify({
+            token: req.query.join_token
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(response => response.json())
+        .then(({ token }) => {
+          res.locals.token = token
+          res.cookie('token', token, {
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+            // maxAge: 0
+          })
+        })
+        .catch(e => {
+          console.log(e.message)
+        })
+      )
+    }
+
+    Promise.all(promises)
+    .then(() => next())
+    .catch(next)
+  });
 
   server.get('/', (req, res) => {
     return app.render(req, res, process.env.INDEX_PAGE || '/index', Object.assign(req.query, res.locals))
+  })
+
+  server.get('/inbox', (req, res) => {
+    return app.render(req, res, '/inbox', req.query)
   })
 
   server.get('/join', (req, res) => {
@@ -121,3 +156,7 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
+
+process.on('SIGINT', () => {
+  process.exit(0);
+});

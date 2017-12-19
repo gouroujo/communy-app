@@ -16,6 +16,30 @@ class OrganisationAddUser extends React.Component {
     message: ''
   }
 
+  onPaste = (i, ev) => {
+    ev.preventDefault()
+    const paste = ev.clipboardData.getData('text/plain')
+    this.setState(prevState => {
+      const users = prevState.users.reduce((acc, user, index) => (
+        index === i ? (
+          acc.concat(paste.split('\n').map(row => {
+            const data = row.split('\t')
+            return {
+              email: data[0] || '',
+              firstname: data[1] || '',
+              lastname: data[2] || ''
+            }
+          }))
+        ) : acc.concat(user)
+      ), [])
+
+      if (users[users.length - 1].email || users[users.length - 1].firstname || users[users.length - 1].lastname) {
+        users.push({ email: '', firstname: '', lastname: ''})
+      }
+      return { users }
+    })
+  }
+
   handleInvite = (ev) => {
     ev.preventDefault();
     this.setState({ loading: true, error: false, success: false }, () => {
@@ -36,7 +60,13 @@ class OrganisationAddUser extends React.Component {
         this.setState({ loading: false, error: true })
       })
     })
-  };
+  }
+
+  noEnterSubmit = (ev) => {
+    if (ev.charCode === 13) {
+      ev.preventDefault()
+    }
+  }
 
   handleChange = (i, ev, { value, name }) => {
     this.setState(prevState => {
@@ -76,16 +106,22 @@ class OrganisationAddUser extends React.Component {
       message
     } = this.state;
     return (
-        <Form loading={loading} onSubmit={this.handleInvite} error={error} success={success}>
+        <Form loading={loading} onKeyPress={this.noEnterSubmit} onSubmit={this.handleInvite} error={error} success={success}>
+
           {users.map((user, i) => {
             return (
               <div key={i}>
-                {(i === (users.length - 1)) && <Divider horizontal>Inviter un nouveau membre</Divider>}
+                {(i === (users.length - 1)) && (
+                  <Divider horizontal>
+                    Inviter un nouveau membre
+                  </Divider>
+                )}
                 <Form.Group style={{ marginBottom: 10 }}>
                   <Form.Input
                     width={5}
                     value={user.email}
                     onChange={(ev) => this.handleChange(i, ev, ev.target)}
+                    onPaste={(ev) => this.onPaste(i, ev)}
                     name="email"
                     placeholder="Email"
                     required={users.length === 1 || (users.length - 1) !== i}
@@ -101,6 +137,13 @@ class OrganisationAddUser extends React.Component {
               </div>
             )
           })}
+          <div style={{
+            textAlign: 'center',
+            color: '#6b6b6b',
+            fontSize: '0.9em'
+          }}>
+          (Vous pouvez copier-coller la liste de vos membres depuis Excel !)
+          </div>
           <Form.TextArea
             autoHeight
             name="message"

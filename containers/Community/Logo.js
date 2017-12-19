@@ -21,6 +21,7 @@ class CommunityLogo extends React.PureComponent {
     const {
       src,
       style,
+      canUplodad
     } = this.props
 
     return (
@@ -33,15 +34,17 @@ class CommunityLogo extends React.PureComponent {
           <div className="ui text loader">Chargement...</div>
         </div>
 
-        <div className="upload">
-          <ButtonUpload
-            style={{ padding: 5 }}
-            icon="camera"
-            disabled={this.state && this.state.loading}
-            onChange={this.uploadLogo}
-          />
-        </div>
-
+        {canUplodad && (
+          <div className="upload">
+            <ButtonUpload
+              style={{ padding: 5 }}
+              icon="camera"
+              disabled={this.state && this.state.loading}
+              onChange={this.uploadLogo}
+            />
+          </div>
+        )}
+        
         <style jsx>{`
           .logo {
             height: 150px;

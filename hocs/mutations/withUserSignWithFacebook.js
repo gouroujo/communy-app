@@ -24,26 +24,24 @@ export const mutation = gql`
 
 const hoc = graphql(mutation, {
   props: ({ ownProps, mutate }) => ({
-    signWithFacebook: (data, stayLogged) => {
+    signWithFacebook: (data) => {
       return mutate({
         variables: {
           input: data,
         },
         update: (store, { data: { user } }) => {
           if (user && user.token) {
-            if (stayLogged) {
-              document.cookie = cookie.serialize('token', user.token, {
-                secure: process.env.NODE_ENV === 'production',
-                maxAge: 30 * 24 * 60 * 60 // 30 days
-              })
-            } else {
-              document.cookie = cookie.serialize('token', user.token, {
-                secure: process.env.NODE_ENV === 'production'
-              })
-            }
+            document.cookie = cookie.serialize('token', user.token, {
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 30 * 24 * 60 * 60, // 30 days
+              path: '/'
+            })
             ownProps.client.resetStore().then(() => {
-              // Now redirect to the homepage
-              redirect({}, '/')
+              if (!ownProps.callback) {
+                redirect({}, ownProps.target || '/', ownProps.as || '/')
+              } else {
+                ownProps.callback()
+              }
             })
           }
         }

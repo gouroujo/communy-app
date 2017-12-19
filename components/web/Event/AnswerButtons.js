@@ -1,7 +1,7 @@
 import { Button, Icon } from 'semantic-ui-react'
 import pick from 'lodash.pick'
 
-export default ({ answer, onChange, compact, ...props }) => {
+export default ({ disabled, answer, onChange, compact, ...props }) => {
   const isYes = answer === 'YES'
   const isMb = answer === 'MAYBE'
   const isNo = answer === 'NO'
@@ -11,6 +11,7 @@ export default ({ answer, onChange, compact, ...props }) => {
       'fluid'
     ])}>
       <Button
+        disabled={disabled}
         active={isYes}
         basic={!isYes}
         color='green'
@@ -19,6 +20,7 @@ export default ({ answer, onChange, compact, ...props }) => {
         {!compact && "Oui"}
       </Button>
       <Button
+        disabled={disabled}
         active={isMb}
         basic={!isMb}
         color='yellow'
@@ -27,6 +29,7 @@ export default ({ answer, onChange, compact, ...props }) => {
         {!compact && "Peut-être"}
       </Button>
       <Button
+        disabled={disabled}
         active={isNo}
         basic={!isNo}
         color='red'

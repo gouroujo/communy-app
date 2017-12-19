@@ -2,15 +2,25 @@ import React from 'react'
 import gql from 'graphql-tag'
 import moment from 'moment'
 
-import EventFilter from 'components/web/Event/Filter'
+// import EventFilter from 'components/web/Event/Filter'
 import EventList from 'components/web/Event/List'
 
-import withCommunity from 'hocs/queries/withCommunity'
+import ParticipationFragment from 'fragments/Participation'
+import EventMinFragment from 'fragments/EventMin'
+import withRegistration from 'hocs/queries/withRegistration'
 
-export const fragment = gql`
-  fragment CommunityRegistrationParticipationFragment on Organisation {
-    id
-    registration (userId: $userId) {
+export const query = gql`
+  query CommunityRegistrationParticipation(
+    $communityId: ID!
+    $userId: ID!
+    $after: DateTime
+    $before: DateTime
+    $answers: [EventAnswer!]
+    $answer: EventAnswer
+    $limit: Int
+    $offset: Int
+  ) {
+    registration (userId: $userId, organisationId: $communityId) {
       id
       nparticipations (
         after: $after
@@ -25,35 +35,15 @@ export const fragment = gql`
         limit: $limit
         offset: $offset
       ) {
-        id
-        answer
+        ...ParticipationFragment
         event {
-          id
-          title
-          startTime
-          endTime
+          ...EventMinFragment
         }
       }
     }
   }
-`
-
-export const query = gql`
-  query CommunityRegistrationParticipation(
-    $communityId: ID!
-    $userId: ID
-    $after: DateTime
-    $before: DateTime
-    $answers: [EventAnswer!]
-    $answer: EventAnswer
-    $limit: Int
-    $offset: Int
-  ) {
-    community: organisation (id: $communityId ) {
-      ...CommunityRegistrationParticipationFragment
-    }
-  }
-  ${fragment}
+  ${ParticipationFragment}
+  ${EventMinFragment}
 `
 
 class RegistrationCommunityParticipationList extends React.PureComponent {
@@ -74,14 +64,14 @@ class RegistrationCommunityParticipationList extends React.PureComponent {
   render() {
     const { communityId, userId } = this.props
 
-    const EventListWithParticipation = withCommunity(query)(EventList)
+    const EventListWithParticipation = withRegistration(query)(EventList)
 
     return (
       <div style={{ textAlign: 'center'}}>
-        <EventFilter
+        {/* <EventFilter
           filter={this.state.participationFilter}
           onChange={this.filterChange}
-        />
+        /> */}
         <EventListWithParticipation
           offset={this.state.offset}
           communityId={communityId}

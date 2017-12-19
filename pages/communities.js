@@ -18,7 +18,7 @@ export default withData(() => (
           <br /><br />
           <Link href="/community-create" as="/communities/create">
             <Button basic inverted>
-              Vous souhaitez plutôt rejoindre une communauté existante ?
+              Vous souhaitez plutôt créer votre communauté ?
             </Button>
           </Link>
         </AppTitle>

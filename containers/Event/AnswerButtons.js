@@ -12,9 +12,10 @@ class AnswerButtons extends React.PureComponent {
   }
 
   render () {
-    const { participation, ...props } = this.props
+    const { event, participation, ...props } = this.props
     return (
       <AnswerButtonsComponent
+        disabled={event && !event.open}
         answer={participation && participation.answer}
         onChange={this.handleAnswer}
         {...props}

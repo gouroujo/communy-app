@@ -1,28 +1,16 @@
 import React from 'react'
 import gql from 'graphql-tag';
 import moment from 'moment'
-
 import Link from 'next/link'
 import { Button } from 'semantic-ui-react'
 
-import withCommunity from 'hocs/queries/withCommunity'
-
-import { fragment as EventCalendarFragment } from 'containers/Event/Calendar'
 import Calendar from 'components/web/Event/Calendar'
 
-export const fragment = gql`
-  fragment CommunityEventListFragment on Organisation {
-    id
-    title
-    events (
-      after: $after
-      before: $before
-    ) {
-      ...EventCalendarFragment
-    }
-  }
-  ${EventCalendarFragment}
-`
+import withCommunityRegistration from 'hocs/queries/withCommunityRegistration'
+import withCommunity from 'hocs/queries/withCommunity'
+import EventFragment from 'fragments/Event'
+import CommunityMinFragment from 'fragments/CommunityMin'
+import ParticipationFragment from 'fragments/Participation'
 
 export const query = gql`
   query CommunityEventList (
@@ -31,10 +19,24 @@ export const query = gql`
     $before: DateTime
   ) {
     community: organisation (id: $communityId ) {
-      ...CommunityEventListFragment
+      id
+      events (
+        after: $after
+        before: $before
+      ) {
+        ...EventFragment
+        participation {
+          ...ParticipationFragment
+        }
+        community: organisation {
+          ...CommunityMinFragment
+        }
+      }
     }
   }
-  ${fragment}
+  ${EventFragment}
+  ${CommunityMinFragment}
+  ${ParticipationFragment}
 `
 
 class CommunityEventList extends React.PureComponent {
@@ -56,7 +58,7 @@ class CommunityEventList extends React.PureComponent {
     return this.setState({ date: moment() })
   }
   render() {
-    const { communityId } = this.props
+    const { communityId, registration } = this.props
 
     const CalendarWithEvents = withCommunity(query)(Calendar)
     return (
@@ -70,11 +72,13 @@ class CommunityEventList extends React.PureComponent {
           handlePrevious={this.handlePrevious}
           handleToday={this.handleToday}
         >
-          <Link
-            href={`/community-event-create?communityId=${communityId}`}
-            as={`/communities/${communityId}/events/create`}>
-            <Button primary content='Ajouter une activité' icon='add' labelPosition='left' />
-          </Link>
+          {registration && registration.permissions.includes('event_create') && (
+            <Link
+              href={`/community-event-create?communityId=${communityId}`}
+              as={`/communities/${communityId}/events/create`}>
+              <Button primary content='Ajouter une activité' icon='add' labelPosition='left' />
+            </Link>
+          )}
         </CalendarWithEvents>
       </div>
 
@@ -82,4 +86,4 @@ class CommunityEventList extends React.PureComponent {
   }
 }
 
-export default CommunityEventList
+export default withCommunityRegistration(CommunityEventList)

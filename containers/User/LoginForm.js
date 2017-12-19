@@ -22,11 +22,11 @@ class UserLoginForm extends React.Component {
           return this.setState(prevState => ({ ...prevState, loading: false, error: 'facebook' }))
         }
         this.props.signWithFacebook(data, this.state.stayLogged)
-          .then(() => this.props.callback && setTimeout(this.props.callback, 0))
-          .catch(e => {
-            console.log(e)
-            this.setState(prevState => ({ ...prevState, loading: false, error: 'facebook' }))
-          });
+          // .then(() => this.props.callback && setTimeout(this.props.callback, 0))
+          // .catch(e => {
+          //   console.log(e)
+          //   this.setState(prevState => ({ ...prevState, loading: false, error: 'facebook' }))
+          // });
       })
     });
   }
@@ -42,11 +42,11 @@ class UserLoginForm extends React.Component {
         email: this.state.email,
         password: this.state.password,
       })
-      .then(() => this.props.callback && setTimeout(this.props.callback, 0))
-      .catch(e => {
-        console.log(e)
-        this.setState(prevState => ({ ...prevState, loading: false, error: 'simple' }))
-      });
+      // .then(() => this.props.callback && setTimeout(this.props.callback, 0))
+      // .catch(e => {
+      //   console.log(e)
+      //   this.setState(prevState => ({ ...prevState, loading: false, error: 'simple' }))
+      // });
     });
   }
 

@@ -5,9 +5,6 @@ import Link from 'next/link'
 import withCommunity from 'hocs/queries/withCommunity'
 import withMobileDetection from 'hocs/withMobileDetection'
 
-
-import { Button } from 'semantic-ui-react';
-
 import Cover from 'containers/Community/Cover';
 import Logo from 'containers/Community/Logo';
 import CommunityType from 'components/web/Community/Type'
@@ -26,6 +23,7 @@ export const fragment = gql`
       ack
       role
       confirm
+      permissions
     }
   }
 `
@@ -52,20 +50,11 @@ class CommunityHeader extends React.PureComponent {
     return (
       <div>
         <Cover
+          canUplodad={community && community.registration && community.registration.permissions && community.registration.permissions.includes('edit')}
           src={community && community.cover}
-          communityId={communityId}>
-          {(community && community.registration && community.registration.role === 'ADMIN') && (
-              <Link
-                href={`/community-edit?communityId=${communityId}`}
-                as={`/communities/${communityId}/edit`}>
-                <Button key={1} icon='edit' size="mini" label={isMobile ? null : "Modifier"}/>
-              </Link>
-          )}
-          {/* <Link href={`/communitys/${communityId}/settings`}>
-            <Button key={2} icon='settings' size="mini" label={isMobile ? null : "Configurer"}/>
-          </Link> */}
-        </Cover>
+          communityId={communityId} />
         <Logo
+          canUplodad={community && community.registration && community.registration.permissions && community.registration.permissions.includes('edit')}
           src={community && community.logo}
           communityId={communityId}
           className="logo"
@@ -75,10 +64,16 @@ class CommunityHeader extends React.PureComponent {
           paddingLeft: isMobile ? 0 : 215,
           textAlign: isMobile ? 'center' : 'initial'
         }}>
-          <h1>{community && community.title}</h1>
+          <Link
+            href={`/community?communityId=${communityId}`}
+            as={`/communities/${communityId}`}
+            >
+            <h1>{community && community.title}</h1>
+          </Link>
+
           <CommunityType type={community && community.type} />
           <br/>
-          {isMobile && <UserRegistrationButtons communityId={community.id} community={community} registration={community.registration} />}
+          {isMobile && <UserRegistrationButtons communityId={communityId} community={community} registration={community.registration} />}
         </div>
         {!isMobile && (
           <div style={{
@@ -87,7 +82,7 @@ class CommunityHeader extends React.PureComponent {
             top: 310
           }}>
             {community && (
-              <UserRegistrationButtons communityId={community.id} community={community} registration={community.registration} />
+              <UserRegistrationButtons communityId={communityId} community={community} registration={community.registration} />
             )}
           </div>
         )}

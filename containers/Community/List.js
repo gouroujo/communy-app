@@ -1,5 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
+
 import withCommunities from 'hocs/queries/withCommunities'
 
 import CommunityList from 'components/web/Community/List'
@@ -67,6 +68,7 @@ export default class Communities extends React.PureComponent {
           {...this.state.filter}
           Action={(props) => (
             <UserButtons
+              community={props.community}
               communityId={props.communityId}
               registration={props.community && props.community.registration} />
           )} />

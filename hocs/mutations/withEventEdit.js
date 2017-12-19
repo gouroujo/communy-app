@@ -4,11 +4,11 @@ import gql from 'graphql-tag';
 
 import EventFragment from 'fragments/Event';
 
-import { query as EventsQuery } from 'hocs/queries/withEvents';
+// import { query as EventsQuery } from 'hocs/queries/withEvents';
 
 export const mutation = gql`
   mutation editEvent(
-    $input: EventInput!
+    $input: EventEditInput!
     $id: ID!
   ) {
     editEvent(
@@ -29,9 +29,9 @@ export default graphql(mutation, {
           id: ownProps.eventId,
           input: event,
         },
-        refetchQueries: [
-          { query: EventsQuery, variables: { organisationId: ownProps.organisationId },},
-        ],
+        // refetchQueries: [
+        //   { query: EventsQuery, variables: { organisationId: ownProps.organisationId },},
+        // ],
         // optimisticResponse: {
         //   __typename: 'Mutation',
         //   createEvent: {

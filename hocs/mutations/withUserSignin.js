@@ -33,16 +33,21 @@ const hoc = graphql(mutation, {
             if (stayLogged) {
               document.cookie = cookie.serialize('token', user.token, {
                 secure: process.env.NODE_ENV === 'production',
-                maxAge: 30 * 24 * 60 * 60 // 30 days
+                maxAge: 30 * 24 * 60 * 60, // 30 days
+                path: '/'
               })
             } else {
               document.cookie = cookie.serialize('token', user.token, {
-                secure: process.env.NODE_ENV === 'production'
+                secure: process.env.NODE_ENV === 'production',
+                path: '/'
               })
             }
             ownProps.client.resetStore().then(() => {
-              // Now redirect to the homepage
-              redirect({}, '/')
+              if (!ownProps.callback) {
+                redirect({}, ownProps.target || '/', ownProps.as || '/')
+              } else {
+                ownProps.callback()
+              }
             })
           }
         }

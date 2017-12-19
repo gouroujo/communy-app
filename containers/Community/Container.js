@@ -24,6 +24,7 @@ export const fragment = gql`
       ack
       confirm
       role
+      permissions
     }
   }
 `
@@ -39,11 +40,8 @@ export const query = gql`
   ${fragment}
 `
 class CommunityContainer extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stick: false
-    }
+  state = {
+    stick: false
   }
 
   componentDidMount() {
@@ -80,8 +78,7 @@ class CommunityContainer extends React.PureComponent {
 
       window.requestAnimationFrame(step);
     }
-
-}
+  }
 
   render() {
     const {
@@ -89,7 +86,6 @@ class CommunityContainer extends React.PureComponent {
       community,
       communityId,
     } = this.props;
-
     return (
       <Container>
         <Dimmer.Dimmable as={Card} dimmed={loading} fluid className="community">
@@ -107,7 +103,7 @@ class CommunityContainer extends React.PureComponent {
                 n'a pas été trouvée<br /><br />
               </Header.Content>
               <Header.Subheader>
-                <Link href={process.env.INDEX_PAGE} as="/"><Button primary>Retour</Button></Link>
+                <Link href={process.browser ? window.__ENV__.INDEX_PAGE : process.env.INDEX_PAGE} as="/"><Button primary>Retour</Button></Link>
               </Header.Subheader>
             </Header>
           </Dimmer>
@@ -118,7 +114,7 @@ class CommunityContainer extends React.PureComponent {
           <CommunityHeader communityId={communityId} />
           <div className="content" ref={this.handleContextRef}>
             <Sticky context={this.state.contextRef} offset={60} className="sticky" onStick={this.onStick} onUnstick={this.onUnstick}>
-              <CommunityMenu communityId={communityId} />
+              <CommunityMenu communityId={communityId} permissions={community && community.registration && community.registration.permissions}/>
             </Sticky>
             <div className="children">
               {this.props.children}

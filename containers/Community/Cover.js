@@ -19,6 +19,7 @@ class CommunityCover extends React.PureComponent {
     const {
       src,
       style,
+      canUplodad,
       children,
     } = this.props
 
@@ -32,14 +33,16 @@ class CommunityCover extends React.PureComponent {
           <div className="ui text loader">Chargement...</div>
         </div>
 
-        <div className="upload">
-          <ButtonUpload
-            style={{ padding: 5 }}
-            icon="camera"
-            disabled={this.state && this.state.loading}
-            onChange={this.uploadCover}
-          />
-        </div>
+        {canUplodad && (
+          <div className="upload">
+            <ButtonUpload
+              style={{ padding: 5 }}
+              icon="camera"
+              disabled={this.state && this.state.loading}
+              onChange={this.uploadCover}
+            />
+          </div>
+        )}
 
         <div className="children">
           {children}

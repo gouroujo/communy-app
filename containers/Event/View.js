@@ -5,34 +5,16 @@ import EventDescription from 'components/web/Event/Description'
 
 import withEvent from 'hocs/queries/withEvent'
 
-export const fragment = gql`
-  fragment EventViewFragment on Event {
-    id
-    title
-    description
-    nanswer
-    nyes
-    nno
-    nmb
-    participation {
-      id
-      answer
-    }
-    startTime
-    endTime
-    duration
-  }
-`
 
 export const query = gql`
-  query EventView(
+  query EventDescription(
     $eventId: ID!
   ) {
     event (id: $eventId ) {
-      ...EventViewFragment
+      id
+      description
     }
   }
-  ${fragment}
 `
 
 class EventView extends React.PureComponent {
@@ -40,7 +22,10 @@ class EventView extends React.PureComponent {
   render() {
     const { event } = this.props;
     return (
-      <div>
+      <div style={{
+        maxWidth: 600,
+        margin: '1em auto'
+      }}>
         <EventDescription event={event} />
       </div>
     )

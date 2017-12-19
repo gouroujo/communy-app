@@ -1,17 +1,21 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Button } from 'semantic-ui-react'
 
-import UserLoginForm from 'containers/User/LoginForm';
-import UserSigninForm from 'containers/User/SigninForm';
-import UserResetForm from 'containers/User/ResetForm';
+import UserLoginForm from 'containers/User/LoginForm'
+import UserSigninForm from 'containers/User/SigninForm'
+import UserResetForm from 'containers/User/ResetForm'
 
 export default function(WrappedComponent) {
   return class extends React.PureComponent {
+    static contextTypes = {
+      user: PropTypes.object
+    }
+
     state = {
       open: false,
       resetPassword: false,
       signin: true,
-      callback: null,
     }
 
     open = () => {
@@ -30,8 +34,11 @@ export default function(WrappedComponent) {
 
     loginBefore = (next) => {
       return (params) => {
-        if (this.props.user) return next(params);
-        this.setState({ open: true, callback: next })
+        if (this.props.user) return next(params)
+        return new Promise(resolve => {
+          this.setState({ open: true })
+          this.callback = () => setTimeout(resolve(next(params)), 0)
+        })
       }
     }
     render() {
@@ -42,8 +49,8 @@ export default function(WrappedComponent) {
 
           <Modal.Content image>
             {this.state.resetPassword &&  <UserResetForm />}
-            {this.state.signin && <UserSigninForm callback={this.state.callback}/>}
-            {!this.state.resetPassword && !this.state.signin && <UserLoginForm callback={this.state.callback}/>}
+            {this.state.signin && <UserSigninForm callback={this.callback}/>}
+            {!this.state.resetPassword && !this.state.signin && <UserLoginForm callback={this.callback}/>}
           </Modal.Content>
 
           <Modal.Actions>

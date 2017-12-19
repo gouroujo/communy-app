@@ -44,13 +44,6 @@ class SigninForm extends React.PureComponent {
           return this.setState(prevState => ({ ...prevState, loading: false, error: 'facebook' }))
         }
         this.props.signWithFacebook(data, this.state.stayLogged)
-          .then(() => {
-            return this.props.callback && setTimeout(this.props.callback, 0);
-          })
-          .catch(e => {
-            console.log(e);
-            this.setState(prevState => ({ ...prevState, loading: false, error: 'facebook' }))
-          });
       })
     });
   }
@@ -65,13 +58,6 @@ class SigninForm extends React.PureComponent {
         lastname: this.state.lastname,
         birthday: this.state.birthday,
       })
-      .then(() => {
-        return this.props.callback && setTimeout(this.props.callback, 0);
-      })
-      .catch(e => {
-        console.log(e);
-        this.setState(prevState => ({ ...prevState, loading: false, error: 'simple' }))
-      });
     });
   }
 
@@ -121,7 +107,7 @@ class SigninForm extends React.PureComponent {
           </Form.Field>
           {/* <Form.Input /> */}
           <Form.Group inline>
-            <Form.Input label='Date de naissance :' type='date' required name="birthday" placeholder="JJ/MM/AAAA" value={birthday} onChange={this.handleChange}/>
+            <Form.Input label='Date de naissance :' type='date' required name="birthday" placeholder="AAAA-MM-JJ" value={birthday} onChange={this.handleChange}/>
           </Form.Group>
           <Form.Field>
             <Form.Checkbox label='Rester connecté sur cet appareil' name='stayLogged' checked={this.state.stayLogged} onChange={this.handleChange}/>

@@ -3,30 +3,28 @@ import gql from 'graphql-tag';
 import Link from 'next/link'
 import { Button } from 'semantic-ui-react'
 
+import RegistrationList from 'containers/Registration/UserList'
+
 import withCommunity from 'hocs/queries/withCommunity'
-
-import RegistrationList, { fragment as RegistrationUserListFragment } from 'containers/Registration/UserList'
-
-export const fragment = gql`
-  fragment CommunityRegistrationListFragment on Organisation {
-    id
-    title
-    registrations {
-      ...RegistrationUserListFragment
-    }
-  }
-  ${RegistrationUserListFragment}
-`
+import RegistrationFragment from 'fragments/Registration'
+import UserMinFragment from 'fragments/UserMin'
 
 export const query = gql`
   query CommunityEventList (
     $communityId: ID!
   ) {
     community: organisation (id: $communityId ) {
-      ...CommunityRegistrationListFragment
+      id
+      registrations {
+        ...RegistrationFragment
+        user {
+          ...UserMinFragment
+        }
+      }
     }
   }
-  ${fragment}
+  ${RegistrationFragment}
+  ${UserMinFragment}
 `
 
 class CommunityRegistrationList extends React.PureComponent {

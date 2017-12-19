@@ -63,7 +63,6 @@ const UserRegistrationButtons = ({
     </ButtonWithConfirm>
 
   }
-
   if (community) {
     return (
       <ButtonWithConfirm

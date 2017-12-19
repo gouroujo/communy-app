@@ -1,7 +1,11 @@
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-// import { fragment as EventContainerFragment } from 
+import dataIdFromObject from 'lib/dataIdFromObject'
+
+import ParticipationFragment from 'fragments/Participation'
+import EventParticipationFragment from 'fragments/EventParticipation'
+import UserParticipationFragment from 'fragments/UserParticipation'
 
 export default graphql(gql`
   mutation eventAnswer(
@@ -19,11 +23,11 @@ export default graphql(gql`
       nno
       nmb
       participation (userId: $userId) {
-        id
-        answer
+        ...ParticipationFragment
       }
     }
   }
+  ${ParticipationFragment}
 `, {
   props: ({ mutate, ownProps }) => ({
     eventAnswer: (answer) => mutate({
@@ -43,14 +47,52 @@ export default graphql(gql`
           participation: {
             __typename: 'Participation',
             id: -1,
-            ...ownProps.event.participation,
+            // ...ownProps.event.participation,
             answer: answer,
           },
         }
       },
-      // update: (store, { data: { event } }) => {
-      //   const data = store.readQuery()
-      // },
+      update: (store, { data }) => {
+        if (!data.event || !data.event.participation) return
+
+        const event = store.readFragment({
+          id: dataIdFromObject({ id: ownProps.eventId, __typename: 'Event' }),
+          fragmentName: 'EventParticipationFragment',
+          fragment: EventParticipationFragment,
+          variables: { userId: ownProps.userId }
+        })
+
+        if (event) {
+          event.participation = data.event.participation
+          store.writeFragment({
+            id: dataIdFromObject({ id: ownProps.eventId, __typename: 'Event' }),
+            fragmentName: 'EventParticipationFragment',
+            fragment: EventParticipationFragment,
+            variables: { userId: ownProps.userId },
+            data: event,
+          })
+        }
+
+        const user = store.readFragment({
+          id: dataIdFromObject({ id: ownProps.userId, __typename: 'User' }),
+          fragmentName: 'UserParticipationFragment',
+          fragment: UserParticipationFragment,
+          variables: { eventId: ownProps.eventId }
+        })
+
+        if (user && !user.participation) {
+          user.participation = data.event.participation
+          store.writeFragment({
+            id: dataIdFromObject({ id: ownProps.userId, __typename: 'User' }),
+            fragmentName: 'UserParticipationFragment',
+            fragment: UserParticipationFragment,
+            variables: { eventId: ownProps.eventId },
+            data: user
+          })
+        }
+
+
+      },
     }),
   })
 });

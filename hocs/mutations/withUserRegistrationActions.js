@@ -1,8 +1,12 @@
-import { graphql, compose } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import { query as CommunityQuery } from 'containers/Community/Container'
-import { query as UserQuery } from 'hocs/queries/withUser'
+import dataIdFromObject from 'lib/dataIdFromObject'
+
+import RegistrationFragment from 'fragments/Registration'
+import CommunityRegistrationFragment from 'fragments/CommunityRegistration'
+import UserRegistrationsFragment from 'fragments/UserRegistrations'
+
 
 const addCommunityToUser = graphql(gql`
   mutation addUserToCommunity (
@@ -11,10 +15,7 @@ const addCommunityToUser = graphql(gql`
     user: addOrganisationToUser(organisationId: $communityId) {
       id
       registration (organisationId: $communityId) {
-        id
-        ack
-        confirm
-        role
+        ...RegistrationFragment
         organisation {
           id
           title
@@ -23,6 +24,7 @@ const addCommunityToUser = graphql(gql`
       }
     }
   }
+  ${RegistrationFragment}
   `, {
   props: ({ mutate, ownProps }) => ({
     addCommunity: (ev) => {
@@ -36,32 +38,37 @@ const addCommunityToUser = graphql(gql`
         },
         update: (store, { data }) => {
           if (!data.user || !data.user.registration) return
+
           // ----- ADD TO COMMUNITY REGISTRATION ---
-          const community = store.readQuery({
-            query: CommunityQuery,
-            variables: { communityId: ownProps.communityId },
+          const community = store.readFragment({
+            id: dataIdFromObject({ id: ownProps.communityId, __typename: 'Organisation' }),
+            fragmentName: 'CommunityRegistrationFragment',
+            fragment: CommunityRegistrationFragment
           });
+
           if (community) {
-            community.registration = {
-              id: data.user.registration.id,
-              ack: data.user.registration.ack,
-              confirm: data.user.registration.confirm,
-              role: data.user.registration.role
-            }
-            store.writeQuery({
-              query: CommunityQuery,
-              variables: { communityId: ownProps.communityId },
+            community.registration = data.user.registration
+            store.writeFragment({
+              id: dataIdFromObject({ id: ownProps.communityId, __typename: 'Organisation' }),
+              fragment: CommunityRegistrationFragment,
+              fragmentName: 'CommunityRegistrationFragment',
               data: community,
             })
           }
+
           // ----- ADD TO USER REGISTRATION ---
-          const user = store.readQuery({
-            query: UserQuery,
+          const user = store.readFragment({
+            id: dataIdFromObject({ id: data.user.id, __typename: 'User' }),
+            fragmentName: 'UserRegistrationsFragment',
+            fragment: UserRegistrationsFragment
           });
+
           if (user && user.registrations) {
             user.registrations.push(data.user.registration)
-            store.writeQuery({
-              query: UserQuery,
+            store.writeFragment({
+              id: dataIdFromObject({ id: data.user.id, __typename: 'User' }),
+              fragmentName: 'UserRegistrationsFragment',
+              fragment: UserRegistrationsFragment,
               data: user,
             })
           }
@@ -99,15 +106,20 @@ const removeCommunityToUser = graphql(gql`
         update: (store, { data }) => {
           if (!data.user || !data.user.registration) return
 
-          const user = store.readQuery({
-            query: UserQuery,
+          const user = store.readFragment({
+            id: dataIdFromObject({ id: data.user.id, __typename: 'User' }),
+            fragmentName: 'UserRegistrationsFragment',
+            fragment: UserRegistrationsFragment
           });
+
           if (user && user.registrations) {
             const index = user.registrations.findIndex(e => e.id === data.user.registration.id)
             if (index >= 0) return
             user.registrations.splice(index, 1)
-            store.writeQuery({
-              query: UserQuery,
+            store.writeFragment({
+              id: dataIdFromObject({ id: data.user.id, __typename: 'User' }),
+              fragmentName: 'UserRegistrationsFragment',
+              fragment: UserRegistrationsFragment,
               data: user,
             })
           }

@@ -1,0 +1,7 @@
+{
+  "apps" : [{
+    "name"        : "nextjs",
+    "script"      : "./server.js",
+    "exec_mode"  : "cluster"
+  }]
+}
