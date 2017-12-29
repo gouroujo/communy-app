@@ -133,9 +133,17 @@ app.prepare().then(() => {
     }))
   })
 
+
   server.get('/communities/:communityId/mailings', (req, res) => {
     return app.render(req, res, '/community-mailings', Object.assign(req.query, {
       communityId: req.params.communityId
+    }))
+  })
+
+  server.get('/communities/:communityId/mailings/:mailingId', (req, res) => {
+    return app.render(req, res, '/community-mailings', Object.assign(req.query, {
+      communityId: req.params.communityId,
+      mailingId: req.params.mailingId
     }))
   })
 

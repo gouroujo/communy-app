@@ -16,7 +16,7 @@ import LoginForm from 'containers/User/LoginForm'
 class Login extends React.Component {
 
   static async getInitialProps (context, apolloClient) {
-    const { user } = await getUser(context, apolloClient)
+    const user = await getUser(context, apolloClient)
     if (user) {
       redirect(context, '/')
     }

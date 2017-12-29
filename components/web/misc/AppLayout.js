@@ -24,11 +24,14 @@ export default ({ title, menu, children }) => (
         min-height: 100vh;
       }
       .menu {
-        height: 60px;
+        height: 54px;
       }
       .content {
         flex: 1;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
       }
     `}</style>
   </div>

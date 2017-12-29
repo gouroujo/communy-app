@@ -4,7 +4,7 @@ import { compose } from 'react-apollo'
 import ButtonWithConfirm from 'components/web/misc/ButtonWithConfirm'
 
 import withLoginBefore from 'hocs/withLoginBefore'
-import withUser from 'hocs/queries/withUser'
+import withCurrentUser from 'hocs/queries/withCurrentUser'
 import withUserRegistrationActions from 'hocs/mutations/withUserRegistrationActions'
 
 import { Button, Icon } from 'semantic-ui-react';
@@ -83,7 +83,7 @@ const UserRegistrationButtons = ({
 }
 
 export default compose(
-  withUser,
+  withCurrentUser,
   withLoginBefore,
   withUserRegistrationActions
 )(UserRegistrationButtons);

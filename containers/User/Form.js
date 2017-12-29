@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Message } from 'semantic-ui-react'
 
-import withUser from 'hocs/queries/withUser'
+import withCurrentUser from 'hocs/queries/withCurrentUser'
 import withUserEdit from 'hocs/mutations/withUserEdit'
 
 class UserForm extends React.Component {
@@ -142,4 +142,4 @@ class UserForm extends React.Component {
 }
 
 
-export default withUserEdit(withUser(UserForm))
+export default withUserEdit(withCurrentUser(UserForm))

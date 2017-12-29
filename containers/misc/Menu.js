@@ -6,7 +6,7 @@ import { Button } from 'semantic-ui-react'
 import Menu from 'components/web/misc/Menu'
 import UserMenu from 'containers/User/Menu';
 
-import withUser from 'hocs/queries/withUser';
+import withCurrentUser from 'hocs/queries/withCurrentUser';
 
 // import image from 'static/images/logo.svg'
 
@@ -97,4 +97,4 @@ class AppMenu extends React.PureComponent {
   }
 }
 
-export default withUser(withRouter(AppMenu))
+export default withCurrentUser(withRouter(AppMenu))

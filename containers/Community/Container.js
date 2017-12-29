@@ -4,40 +4,27 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 import withCommunity from 'hocs/queries/withCommunity'
+import CommunityFragment from 'fragments/Community'
+import RegistrationFragment from 'fragments/Registration'
 
-import { Container, Card, Dimmer, Loader, Sticky, Header, Icon, Button } from 'semantic-ui-react'
+import { Card, Dimmer, Loader, Sticky, Header, Icon, Button } from 'semantic-ui-react'
 
 import CommunityHeader from 'containers/Community/Header'
 import CommunityMenu from 'components/web/Community/Menu'
-
-export const fragment = gql`
-  fragment CommunityContainerFragment on Organisation {
-    id
-    title
-    logo
-    cover
-    nusers
-    nevents
-    description
-    registration {
-      id
-      ack
-      confirm
-      role
-      permissions
-    }
-  }
-`
 
 export const query = gql`
   query CommunityView(
     $communityId: ID!
   ) {
     community: organisation (id: $communityId ) {
-      ...CommunityContainerFragment
+      ...CommunityFragment
+      registration {
+        ...RegistrationFragment
+      }
     }
   }
-  ${fragment}
+  ${CommunityFragment}
+  ${RegistrationFragment}
 `
 class CommunityContainer extends React.PureComponent {
   state = {
@@ -87,7 +74,7 @@ class CommunityContainer extends React.PureComponent {
       communityId,
     } = this.props;
     return (
-      <Container>
+      <div className="ui container communy-container">
         <Dimmer.Dimmable as={Card} dimmed={loading} fluid className="community">
 
           <Dimmer active={loading} inverted>
@@ -124,6 +111,10 @@ class CommunityContainer extends React.PureComponent {
 
         </Dimmer.Dimmable>
         <style jsx>{`
+          .communy-container {
+            /* max-width: 860px; */
+            margin: 1em auto;
+          }
           .content {
             flex: 1;
             display: flex;
@@ -133,6 +124,9 @@ class CommunityContainer extends React.PureComponent {
             margin-top: ${this.state.stick ? '52px' : '10px'};
             padding-bottom: 2em;
             flex: 1;
+            display: flex;
+            flex-direction:column;
+            align-items: stretch;
           }
         `}</style>
         <style jsx global>{`
@@ -145,16 +139,16 @@ class CommunityContainer extends React.PureComponent {
             flex-direction: column;
           }
           @media only screen and (max-width: 767px) {
-            .ui.container {
+            .ui.container.communy-container {
               margin: 0 !important;
             }
-            .ui.container > .segment,
-            .ui.container > .card {
+            .ui.container.communy-container > .segment,
+            .ui.container.communy-container > .card {
               border-radius: 0 !important;
             }
           }
         `}</style>
-      </Container>
+      </div>
     )
   }
 }

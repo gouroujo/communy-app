@@ -1,8 +1,8 @@
-import withUser from 'hocs/queries/withUser';
+import withCurrentUser from 'hocs/queries/withCurrentUser';
 import Navigation from 'components/web/misc/NavList'
 import AppTitle from 'components/web/misc/Title'
 
-export default withUser(({ user, loading, ...props }) => {
+export default withCurrentUser(({ user, loading, ...props }) => {
 
   if (loading) {
     return <div>Chargement</div>

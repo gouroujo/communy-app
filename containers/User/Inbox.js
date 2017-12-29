@@ -1,27 +1,42 @@
 import React from 'react'
 
-class UserInbox extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedMessageId: null
-    }
-  }
+import UserViewItemsContainer from 'containers/User/ViewItemsContainer'
+import EventContainer from 'containers/Event/Container'
+import EventView from 'containers/Event/View'
 
-  handleSelectMessage = (selectedMessageId) => this.setState({ selectedMessageId })
+class UserInbox extends React.PureComponent {
+    state = {
+      itemId: this.props.itemId,
+      type: this.props.type || 'inbox',
+    }
+
+  handleSelectType = (type) => this.setState({ type, itemId: null })
+  handleSelectItem = (itemId) => this.setState({ itemId })
 
   render() {
-    const { selectedMessageId } = this.state
+    const { itemId, type } = this.state
     return (
       <div className="inbox">
-        <div className="filter">
-          filter
-        </div>
+
         <div className="list">
-          List
+          <UserViewItemsContainer
+            itemId={itemId}
+            type={type}
+            onSelectItem={this.handleSelectItem}
+           />
         </div>
-        <div className={`message${selectedMessageId ? '' : ' hidden'}`}>
-          Message: {selectedMessageId}
+
+        <div className="item">
+
+        {(type === 'events') && itemId && (
+          <EventContainer
+            eventId={itemId}>
+            <EventView
+              eventId={itemId}
+            />
+          </EventContainer>
+        )}
+
         </div>
         <style jsx>{`
           .inbox {
@@ -33,22 +48,16 @@ class UserInbox extends React.PureComponent {
             display: flex;
             align-items: stretch;
           }
-          .filter {
-            flex: 1;
-            max-width: 300px;
-            min-width: 100px;
-            background-color: #999999;
-            height: 100%;
-          }
           .list {
             flex: 1;
             max-width: 400px;
             min-width: 100px;
-            background-color: blue;
+            overflow-y: scroll;
           }
-          .message {
+          .item {
             flex: 2;
-            background-color: yellow;
+            border-left: 1px solid #acacac;
+            padding-top: 1em;
           }
         `}</style>
       </div>

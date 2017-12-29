@@ -13,15 +13,15 @@ export default (query) => {
         answer: ownProps.answer
       },
     }),
-    props: ({ data: { loading, community } }) => ({
+    props: ({ data: { loading, ...props } }) => ({
       loading,
-      community,
-      events: community && (community.events || (community.registration && community.registration.participations && community.registration.participations.map(participation => ({
-        ...participation.event,
-        participation
-      })))),
-      nevents: community && (community.nevents || (community.registration && community.registration.nparticipations)),
-      registrations: community && community.registrations,
+      ...props,
+      // events: community && (community.events || (community.registration && community.registration.participations && community.registration.participations.map(participation => ({
+      //   ...participation.event,
+      //   participation
+      // })))),
+      // nevents: community && (community.nevents || (community.registration && community.registration.nparticipations)),
+      // registrations: community && community.registrations,
     }),
   })
 }

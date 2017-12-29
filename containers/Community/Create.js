@@ -2,7 +2,7 @@ import React from 'react'
 import { compose } from 'react-apollo'
 import { withRouter } from 'next/router'
 
-import withUser from 'hocs/queries/withUser'
+import withCurrentUser from 'hocs/queries/withCurrentUser'
 import withLoginBefore from 'hocs/withLoginBefore'
 import withCommunityCreate from 'hocs/mutations/withCommunityCreate'
 
@@ -29,7 +29,7 @@ class OrganisationCreateForm extends React.PureComponent {
 }
 
 export default compose(
-  withUser,
+  withCurrentUser,
   withLoginBefore,
   withCommunityCreate,
   withRouter,

@@ -1,6 +1,6 @@
 import withData from 'lib/withData'
 import CommunityContainer from 'containers/Community/Container'
-import CommunityEvents from 'containers/Community/EventList'
+import CommunityEvents from 'containers/Community/EventCalendar'
 
 import Menu from 'containers/misc/Menu'
 import Layout from 'components/web/misc/Layout'

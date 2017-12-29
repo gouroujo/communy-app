@@ -2,22 +2,32 @@ import React from 'react'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 
-import { Button } from 'semantic-ui-react'
-import Menu from 'components/web/misc/Menu'
+import { Menu, Button, Icon, Label } from 'semantic-ui-react'
+// import Menu from 'components/web/misc/Menu'
 import UserMenu from 'containers/User/Menu';
 
-import withUser from 'hocs/queries/withUser';
+import withCurrentUser from 'hocs/queries/withCurrentUser';
 
 class AppMenu extends React.PureComponent {
   render() {
     const { user } = this.props;
     if (user) {
       return (
-        <Menu value={1}>
-          <Link href={process.browser ? window.__ENV__.INDEX_PAGE : process.env.INDEX_PAGE} as="/">
-            <img src={this.props.logo} alt="Communy" />
+        <Menu inverted fixed="top">
+          <Menu.Item>
+            <Link href={process.browser ? window.__ENV__.INDEX_PAGE : process.env.INDEX_PAGE} as="/">
+              <img src={this.props.logo} alt="Communy" style={{ height: 35, width: 'auto'}}/>
+            </Link>
+          </Menu.Item>
+
+          <Link href="/inbox">
+          <div className="right menu">
+            <Label className="item">
+              <Icon name='mail outline' />{user.nunreadMessage}
+            </Label>
+            <UserMenu user={user} className="item"/>
+          </div>
           </Link>
-          <UserMenu className="menu-item" user={user}/>
         </Menu>
       )
     }
@@ -51,4 +61,4 @@ class AppMenu extends React.PureComponent {
   }
 }
 
-export default withUser(withRouter(AppMenu))
+export default withCurrentUser(withRouter(AppMenu))

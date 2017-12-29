@@ -14,7 +14,7 @@ import Landing from 'containers/misc/Landing'
 
 class Index extends React.Component {
   static async getInitialProps (context, apolloClient) {
-    const { user } = await getUser(context, apolloClient)
+    const user = await getUser(context, apolloClient)
     // if (user) {
     //   // If not signed in, send them somewhere more useful
     //   // redirect(context, '/app')

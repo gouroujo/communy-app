@@ -1,5 +1,5 @@
 export default ({ value, children }) => (
-  <div className="communy-menu">
+  <div className="ui menu inverted communy-menu">
     {children}
     <style jsx global>{`
       .communy-menu {
@@ -9,8 +9,9 @@ export default ({ value, children }) => (
         left: 0;
         top: 0;
         display: flex;
-        height: 60px;
-        background-color: rgba(50, 50, 50, 1);
+        border-radius: 0 !important;
+        height: 60px !important;
+        background-color: rgba(50, 50, 50, 1) !important;
         padding: 10px;
         justify-content: space-between;
         align-items: center;

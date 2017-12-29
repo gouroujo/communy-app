@@ -16,7 +16,7 @@ import UserForm from 'containers/User/Form'
 class Index extends React.Component {
 
   static async getInitialProps (context, apolloClient) {
-    const { user } = await getUser(context, apolloClient)
+    const user = await getUser(context, apolloClient)
     if (!user) {
       redirect(context, '/')
     }

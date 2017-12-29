@@ -14,7 +14,7 @@ import AppTitle from 'containers/misc/AppTitle'
 class CommunityPage extends React.Component {
 
   static async getInitialProps (context, apolloClient) {
-    const { user } = await getUser(context, apolloClient)
+    const user = await getUser(context, apolloClient)
     return { user }
   }
 

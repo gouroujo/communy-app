@@ -1,47 +1,39 @@
 import React from 'react'
-import gql from 'graphql-tag';
-import { Item, Image } from 'semantic-ui-react'
+import gql from 'graphql-tag'
+import { Item } from 'semantic-ui-react'
 
-import DayRange from 'components/web/Event/DayRange'
-
-import withCommunity from 'hocs/queries/withCommunity'
-import EventMinFragment from 'fragments/EventMin'
-import ParticipationFragment from 'fragments/Participation'
+import withCurrentUser from 'hocs/queries/withCommunity'
+import MessageFragment from 'fragments/Message'
+import CommunityMinFragment from 'fragments/CommunityMin'
 
 export const query = gql`
   query CommunityEventList(
     $limit: Int
     $offset: Int
-    $before: DateTime
-    $after: DateTime
-    $communityId: ID!
   ) {
-    community: organisation (id: $communityId) {
+    user {
       id
-      events (
+      messages (
         limit: $limit
         offset: $offset
-        before: $before
-        after: $after
       ) {
-        ...EventMinFragment
-        description
-        participation {
-          ...ParticipationFragment
+        ...MessageFragment
+        community: organisation {
+          ...CommunityMinFragment
         }
       }
     }
   }
-  ${EventMinFragment}
-  ${ParticipationFragment}
+  ${MessageFragment}
+  ${CommunityMinFragment}
 `
 
-class CommunityEventList extends React.PureComponent {
+class UserMessageList extends React.PureComponent {
   render() {
-    const { community, onClick } = this.props;
-    if (!community) return null
+    const { user, onClick } = this.props;
+    if (!user) return null
 
-    if (!community.events || community.events.length === 0) {
+    if (!user.messages || user.messages.length === 0) {
       return (
         <div>
           Vide
@@ -50,25 +42,25 @@ class CommunityEventList extends React.PureComponent {
     }
     return (
       <Item.Group divided>
-        {community.events.map(event => (
-          <Item key={event.id} className="event-item" onClick={() => onClick(event.id)}>
+        {user.messages.map(message => (
+          <Item key={message.id} className="message-item" onClick={() => onClick(message.id)}>
             {/* <Item.Image size='tiny'>
               A b d sdz
             </Item.Image> */}
 
             <Item.Content>
-              <Item.Header>{event.title}</Item.Header>
+              <Item.Header>{message.subject}</Item.Header>
               <Item.Meta>
-                <DayRange start={event.startTime} end={event.endTime} />
+                {message.community && message.community.title}
               </Item.Meta>
               <Item.Description>
-                {event.description}
+                {message.body}
               </Item.Description>
             </Item.Content>
           </Item>
         ))}
         <style jsx global>{`
-          .event-item {
+          .message-item {
             padding: 0 !important;
             font-size: 0.8em !important;
             line-height: 0.8em !important;
@@ -76,7 +68,7 @@ class CommunityEventList extends React.PureComponent {
             overflow: hidden;
             position:relative;
           }
-          .event-item:after {
+          .message-item:after {
             height: 2em !important;
             position: absolute;
             bottom: 0;
@@ -85,7 +77,7 @@ class CommunityEventList extends React.PureComponent {
             visibility: visible!important;
             background: linear-gradient(rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 60%, rgba(255,255,255,1) 100%);
           }
-          .event-item > .content {
+          .message-item > .content {
             margin: 0 5px !important;
             padding-top: 1em !important;
           }
@@ -95,4 +87,4 @@ class CommunityEventList extends React.PureComponent {
   }
 }
 
-export default withCommunity(query)(CommunityEventList)
+export default withCurrentUser(query)(UserMessageList)
