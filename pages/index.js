@@ -12,18 +12,31 @@ import Menu from 'containers/misc/Menu'
 import AppTitle from 'containers/misc/AppTitle'
 import Landing from 'containers/misc/Landing'
 
+import AppLayout from 'components/web/misc/AppLayout'
+
+import UserContainer from 'containers/User/Container'
+import AppMenu from 'containers/misc/AppMenu'
+import Calendar from 'containers/Event/Calendar'
+
 class Index extends React.Component {
   static async getInitialProps (context, apolloClient) {
     const user = await getUser(context, apolloClient)
-    // if (user) {
-    //   // If not signed in, send them somewhere more useful
-    //   // redirect(context, '/app')
-    // }
-
     return { user }
   }
 
   render () {
+    if (this.props.user) {
+      return (
+        <AppLayout
+          title="Communy"
+          menu={(<AppMenu user={this.props.user} logo="/static/images/logo_white.png"/>)}>
+          <UserContainer>
+            <Calendar />
+          </UserContainer>
+        </AppLayout>
+      )
+    }
+
     return (
       <Layout
         colors={["#17ab61", "#1760aa"]}
